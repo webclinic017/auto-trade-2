@@ -1,0 +1,30 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "redis-master",
+    "creationTimestamp": null,
+    "labels": {
+      "io.kompose.service": "redis-master"
+    },
+    "annotations": {
+      "kompose.cmd": "kompose convert -j",
+      "kompose.version": "1.9.0 (093c756)"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "6379",
+        "port": 6379,
+        "targetPort": 6379
+      }
+    ],
+    "selector": {
+      "io.kompose.service": "redis-master"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

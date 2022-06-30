@@ -1,0 +1,49 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "frontend",
+    "creationTimestamp": null,
+    "labels": {
+      "io.kompose.service": "frontend"
+    },
+    "annotations": {
+      "kompose.cmd": "kompose convert -j",
+      "kompose.version": "1.9.0 (093c756)"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "io.kompose.service": "frontend"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "frontend",
+            "image": "gcr.io/google-samples/gb-frontend:v3",
+            "ports": [
+              {
+                "containerPort": 80
+              }
+            ],
+            "env": [
+              {
+                "name": "GET_HOSTS_FROM",
+                "value": "dns"
+              }
+            ],
+            "resources": {}
+          }
+        ],
+        "restartPolicy": "Always"
+      }
+    },
+    "strategy": {}
+  },
+  "status": {}
+}

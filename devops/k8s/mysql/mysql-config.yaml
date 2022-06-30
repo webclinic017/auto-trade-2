@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config  # name of ConfigMap, referenced in other files
+data:
+  db-host: mysql   # host address of mysql server
+  db-name: service_config # name of the database

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment  # 类型是部署 
+metadata:
+  name: mysql-deployment  # 对象的名字
+spec:
+  selector:
+    matchLabels:
+      app: mysql #用来绑定label是“mysql”的Pod
+  strategy:
+    type: Recreate
+  template:   # 开始定义Pod 
+    metadata:
+      labels:
+        app: mysql  #Pod的Label，用来标识Pod
+    spec:
+      containers: # 开始定义Pod里面的容器
+        - image: mysql:5.7
+          name: mysql-con
+          imagePullPolicy: Never
+          env:   #  定义环境变量
+            - name: MYSQL_ROOT_PASSWORD  #  环境变量名
+              value: root  #  环境变量值
+            - name: MYSQL_USER
+              value: dbuser
+            - name: MYSQL_PASSWORD
+              value: dbuser
+          args: ["--default-authentication-plugin=mysql_native_password"]
+          ports:
+            - containerPort: 3306 # mysql端口 
+              name: mysql

@@ -1,0 +1,83 @@
+[
+  {
+    "app_msg_cnt": 3,
+    "app_msg_list": [
+      {
+        "aid": "2247483701_1",
+        "album_id": "0",
+        "appmsg_album_infos": [],
+        "appmsgid": 2247483701,
+        "checking": 0,
+        "copyright_type": 0,
+        "cover": "",
+        "create_time": 1590112162,
+        "digest": "",
+        "has_red_packet_cover": 0,
+        "is_pay_subscribe": 0,
+        "item_show_type": 10,
+        "itemidx": 1,
+        "link": "http://mp.weixin.qq.com/s?__biz=MzU4ODU3OTg0Ng==&mid=2247483701&idx=1&sn=bafb9bd263bc16bfb81072a872684257&chksm=fddbd45ccaac5d4af38a68a1b46e9571f9b2c7d25df2a316d5fe7df3a07f5cb0ad65a952c6c4#rd",
+        "media_duration": "0:00",
+        "mediaapi_publish_status": 0,
+        "pay_album_info": {
+          "appmsg_album_infos": []
+        },
+        "tagid": [],
+        "title": "「协程时空」\n\n 并发的本质",
+        "update_time": 1590112162
+      },
+      {
+        "aid": "2247483698_1",
+        "album_id": "0",
+        "appmsg_album_infos": [],
+        "appmsgid": 2247483698,
+        "checking": 0,
+        "copyright_type": 1,
+        "cover": "https://mmbiz.qlogo.cn/mmbiz_jpg/7WyicTnEU2gicdnRTJJ6xCiaia8Go6d1UfSSwOXgGh5K7hWD9lJic3CMMMic1VXDNOqu4L8qYTdiccKgtIMRnzErtQibeg/0?wx_fmt=jpeg",
+        "create_time": 1570708946,
+        "digest": "Android 组件化最佳实践",
+        "has_red_packet_cover": 0,
+        "is_pay_subscribe": 0,
+        "item_show_type": 0,
+        "itemidx": 1,
+        "link": "http://mp.weixin.qq.com/s?__biz=MzU4ODU3OTg0Ng==&mid=2247483698&idx=1&sn=95ba29725c30678d800313cb4957f46e&chksm=fddbd45bcaac5d4d7ed895589941f37a3d113a4bfd73e36aee257c240ea56800ea3c31444020#rd",
+        "media_duration": "0:00",
+        "mediaapi_publish_status": 0,
+        "pay_album_info": {
+          "appmsg_album_infos": []
+        },
+        "tagid": [],
+        "title": "IRouter 组件化最佳实践",
+        "update_time": 1570708946
+      },
+      {
+        "aid": "2247483694_1",
+        "album_id": "0",
+        "appmsg_album_infos": [],
+        "appmsgid": 2247483694,
+        "checking": 0,
+        "copyright_type": 1,
+        "cover": "https://mmbiz.qlogo.cn/mmbiz_jpg/7WyicTnEU2gibzg3KI3PGRTEtgIEonA1ZH4mmOZWrgek2iczia2mMHJvZf7cyqicf1UXFsN1EHicib2JFWlf6wiafoEicyA/0?wx_fmt=jpeg",
+        "create_time": 1561903845,
+        "digest": "\b为什么会开源这个 SPI 项目 ？",
+        "has_red_packet_cover": 0,
+        "is_pay_subscribe": 0,
+        "item_show_type": 0,
+        "itemidx": 1,
+        "link": "http://mp.weixin.qq.com/s?__biz=MzU4ODU3OTg0Ng==&mid=2247483694&idx=1&sn=292266f2cfe19aea2ce544bce8b4e4bf&chksm=fddbd447caac5d515f9a726deefcd7ed7647303546eba37b59182486e465cbf0bfeaa3c3c96d#rd",
+        "media_duration": "0:00",
+        "mediaapi_publish_status": 0,
+        "pay_album_info": {
+          "appmsg_album_infos": []
+        },
+        "tagid": [],
+        "title": "你可能需要 SPI 了",
+        "update_time": 1561903845
+      }
+    ],
+    "base_resp": {
+      "err_msg": "ok",
+      "ret": 0
+    }
+  }
+]

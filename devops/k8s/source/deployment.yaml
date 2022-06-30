@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-webapp
+spec:
+  selector:
+    app: hello-webapp
+
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: {name: hello-webapp}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-webapp
+      track: stable
+  strategy:
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}
+    type: RollingUpdate
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: hello-webapp
+        track: stable
+      name: hello-webapp
+    spec:
+      containers:
+      - image: IMAGE_URL
+        imagePullPolicy: IfNotPresent
+        name: hello-webapp
+        resources:
+          limits:
+            memory: 0.25G
+            cpu: 0.25
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

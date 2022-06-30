@@ -1,0 +1,30 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "frontend",
+    "creationTimestamp": null,
+    "labels": {
+      "io.kompose.service": "frontend"
+    },
+    "annotations": {
+      "kompose.cmd": "kompose convert -j",
+      "kompose.version": "1.9.0 (093c756)"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "80",
+        "port": 80,
+        "targetPort": 80
+      }
+    ],
+    "selector": {
+      "io.kompose.service": "frontend"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

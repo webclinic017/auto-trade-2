@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysql-con
+          imagePullPolicy: Never
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_USER
+              value: dbuser
+            - name: MYSQL_PASSWORD
+              value: dbuser
+          args: ["--default-authentication-plugin=mysql_native_password"]
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts: # 挂载Pod上的卷到容器
+            - name: mysql-persistent-storage # Pod上卷的名字，与“volumes”名字匹配
+              mountPath: /var/lib/mysql # 挂载的Pod的目录
+      volumes:   # 挂载持久卷到Pod
+        - name: mysql-persistent-storage # 持久卷名字， 与“volumMounts”名字匹配
+          persistentVolumeClaim: 
+            claimName: mysql-pv-claim  # 持久卷申请名字
