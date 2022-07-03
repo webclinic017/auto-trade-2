@@ -44,10 +44,10 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 configs = {
-    "host": "192.168.0.2",
-    "port": 5151,
+    "host": "192.168.1.100",
+    "port": 5434,
     "user": "postgres",
-    "password": "even_the_smallest",
+    "password": "postgres",
 }
 
 

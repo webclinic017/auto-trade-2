@@ -6,6 +6,7 @@ Created on Fri Jul 23 21:57:15 2021
 @author: wangjianxiong
 """
 
+from mimetypes import suffix_map
 import pandas as pd
 from   pandas import DataFrame
 
@@ -39,15 +40,15 @@ import parallel_process_postgres as ppp   # 导入该模块，该模块专为分
 #####################
 # 0. 准备工作
 
-
+dbname = "stock_data_csmar"
 
 #    0.1 创建数据库连接
 
 #  创建数据库 股票分析数据库 的连接 
-conn, curs, engine = ppp.creat_conn_with_pg(dbname='stock_data_for_test')
+conn, curs, engine = ppp.creat_conn_with_pg(dbname=f'{dbname}_for_test')
 
 #  创建数据库 stock_data 的连接 
-conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname='stock_data')
+conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname=dbname)
 
 
 
@@ -123,11 +124,11 @@ except Exception as e:
 
 
 #    1.2.1 创建 parallel_tool_并行任务分配信息表    
-
+suffix = "_csmar"
     
 # 读入交易日期列表
-df = pd.read_sql_query("""SELECT *
-                                   FROM   a_1_0_交易日期表;""",
+df = pd.read_sql_query(f"""SELECT *
+                                   FROM   a_1_0_交易日期表{suffix};""",
                         con = engine2)
 
 
@@ -199,10 +200,10 @@ def foo(i, process_num):
   
     
     #  创建数据库 股票分析数据库 的连接 
-    conn, curs, engine = ppp.creat_conn_with_pg(dbname='stock_data_for_test')
+    conn, curs, engine = ppp.creat_conn_with_pg(dbname=f'{dbname}_for_test')
     
     #  创建数据库 stock_data 的连接 
-    conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname='stock_data')
+    conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname=dbname)
     
     
     count_bat = 0
@@ -254,65 +255,65 @@ def foo(i, process_num):
         
         
         # 读入全部市场当日的股票成交量和成交额到 total_num_df 
-        total_num_df = pd.read_sql_query("""SELECT
+        total_num_df = pd.read_sql_query(f"""SELECT
                                                     SUM(成交量)   AS   全部成交量, 
                                                     SUM(成交额)   AS   全部成交额
                                          
-                                            FROM          a_1_个股日度数据表
+                                            FROM          a_1_个股日度数据表{suffix}
                                             WHERE            交易日期 = %s;""",
                                           con = engine2,
                                           params = (date,))
         
         
         # 读入上证主板当日的股票成交量和成交额到 shangHai_main_num_df 
-        shangHai_main_num_df = pd.read_sql_query("""SELECT
+        shangHai_main_num_df = pd.read_sql_query(f"""SELECT
                                                             SUM(成交量)   AS 上证主板成交量, 
                                                             SUM(成交额)   AS 上证主板成交额
                                        
-                                                    FROM             a_1_个股日度数据表
+                                                    FROM             a_1_个股日度数据表{suffix}
                                                     WHERE          交易日期 = %s;""",
                                                   con = engine2,
                                                   params = (date,))
         
         # 读入深证主板当日的股票成交量和成交额到szse_num_df 
-        shenZhen_main_num_df = pd.read_sql_query("""SELECT
+        shenZhen_main_num_df = pd.read_sql_query(f"""SELECT
                                                             SUM(成交量)  AS 深证主板成交量, 
                                                             SUM(成交额)  AS 深证主板成交额
                                         
-                                                     FROM            a_1_个股日度数据表
+                                                     FROM            a_1_个股日度数据表{suffix}
                                                     WHERE            证券代码  LIKE   '000%%'
                                                       AND            交易日期 = %s;""",
                                                   con = engine2,
                                                   params = (date,))
         
         # 读入中小板当日的股票成交量和成交额到 sme_board_num_df 
-        sme_board_num_df = pd.read_sql_query("""SELECT 
+        sme_board_num_df = pd.read_sql_query(f"""SELECT 
                                                         SUM(成交量)   AS    中小板成交量, 
                                                         SUM(成交额)    AS   中小板成交额
                                        
-                                                 FROM                a_1_个股日度数据表
+                                                 FROM                a_1_个股日度数据表{suffix}
                                                 WHERE                证券代码 LIKE  '002%%'
                                                   AND                交易日期 = %s;""",
                                               con = engine2,
                                               params = (date,))
         
         # 读入创业板当日的股票成交量和成交额到 gem_board_num_df 
-        gem_board_num_df = pd.read_sql_query("""SELECT
+        gem_board_num_df = pd.read_sql_query(f"""SELECT
                                                         SUM(成交量)    AS    创业板成交量, 
                                                         SUM(成交额)    AS    创业板成交额
                                        
-                                                 FROM               a_1_个股日度数据表
+                                                 FROM               a_1_个股日度数据表{suffix}
                                                 WHERE               市场类型 = 16
                                                   AND               交易日期 = %s;""",
                                               con = engine2,
                                               params = (date,))
         
         # 读入科创板当日的股票成交量和成交额到 sci_tech_board_num_df 
-        sci_tech_board_num_df = pd.read_sql_query("""SELECT
+        sci_tech_board_num_df = pd.read_sql_query(f"""SELECT
                                                              SUM(成交量)   AS  科创板成交量, 
                                                              SUM(成交额)   AS  科创板成交额
                                             
-                                                      FROM              a_1_个股日度数据表
+                                                      FROM              a_1_个股日度数据表{suffix}
                                                      WHERE              市场类型 = 32
                                                        AND              交易日期 = %s;""",
                                                    con = engine2,

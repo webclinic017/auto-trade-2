@@ -37,14 +37,14 @@ import parallel_process_postgres as ppp   # 导入该模块，该模块专为分
 # 0. 准备工作
 
 
-
+suffix = "_csmar"
 #    0.1 创建数据库连接
 
 #  创建数据库 股票分析数据库 的连接 
-conn, curs, engine = ppp.creat_conn_with_pg(dbname = 'stock_data_for_test')
+conn, curs, engine = ppp.creat_conn_with_pg(dbname = f'stock_data{suffix}_for_test')
 
 #  创建数据库 stock_data 的连接 
-conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname = 'stock_data')
+conn2, curs2, engine2 = ppp.creat_conn_with_pg(dbname = f'stock_data{suffix}')
 
 
 
