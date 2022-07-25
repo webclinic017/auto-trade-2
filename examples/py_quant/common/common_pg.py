@@ -1,78 +1,178 @@
-#!/usr/local/bin/python
+#!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
-# apk add py-mysqldb or
+# apk add py-pgdb or
 
 import platform
 import datetime
 import time
 import sys
 import os
-import MySQLdb
+import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from sqlalchemy import create_engine
 from sqlalchemy.types import NVARCHAR
 from sqlalchemy import inspect
 import pandas as pd
 import traceback
 import akshare as ak
+import config 
 
 # 使用环境变量获得数据库。兼容开发模式可docker模式。
-MYSQL_HOST = os.environ.get('MYSQL_HOST') if (os.environ.get('MYSQL_HOST') != None) else "mysqldb"
-MYSQL_USER = os.environ.get('MYSQL_USER') if (os.environ.get('MYSQL_USER') != None) else "root"
-MYSQL_PWD = os.environ.get('MYSQL_PWD') if (os.environ.get('MYSQL_PWD') != None) else "mysqldb"
-MYSQL_DB = os.environ.get('MYSQL_DB') if (os.environ.get('MYSQL_DB') != None) else "stock_data"
+pg_host = config.db_pg["host"]
+pg_port = config.db_pg["port"]
+pg_user = config.db_pg["user"]
+pg_pwd = config.db_pg["password"]
+pg_db = config.db_pg["db"]
 
-print("MYSQL_HOST :", MYSQL_HOST, ",MYSQL_USER :", MYSQL_USER, ",MYSQL_DB :", MYSQL_DB)
-MYSQL_CONN_URL = "mysql+mysqldb://" + MYSQL_USER + ":" + MYSQL_PWD + "@" + MYSQL_HOST + ":3306/" + MYSQL_DB + "?charset=utf8mb4"
-print("MYSQL_CONN_URL :", MYSQL_CONN_URL)
+print("pg_host :", pg_host, ",pg_user :", pg_user, ",pg_db :", pg_db)
+url_pg = config.get_url_pg()
+# print("url_pg :", url_pg)
 
 __version__ = "2.0.0"
 # 每次发布时候更新。
 
-def engine():
+def engine(url_db = url_pg):
     engine = create_engine(
-        MYSQL_CONN_URL,
+        url_db,
         encoding='utf8', convert_unicode=True)
     return engine
 
-def engine_to_db(to_db):
-    MYSQL_CONN_URL_NEW = "mysql+mysqldb://" + MYSQL_USER + ":" + MYSQL_PWD + "@" + MYSQL_HOST + ":3306/" + to_db + "?charset=utf8mb4"
+def engine_to_db(dbname):
+    url  = config.get_url_pg(dbname = dbname)
     engine = create_engine(
-        MYSQL_CONN_URL_NEW,
+        url,
         encoding='utf8', convert_unicode=True)
     return engine
+
+def creat_conn_no_db(
+    host = config.db_pg["host"],
+    port = config.db_pg["port"], 
+    user = config.db_pg["user"],
+    password = config.db_pg["password"],
+ ):
+    try:
+        conn = psycopg2.connect(f"host = localhost port = {port} password= {password} user={user}")  
+        # curs  = conn.cursor()
+            
+        # engine = create_engine(f'postgresql://{user}:{password}@localhost:{port}/') 
+    except:
+        try:
+            conn = psycopg2.connect(f"host = {host} port = {port} password= {password} user={user}")  
+            # curs  = conn.cursor()
+        except:       
+            print('数据库连接创建失败')
+    return conn
+
+def create_db(dbname,
+              conn, 
+              curs):
+    """
+    目标：在PostgreSQL服务器中，创建指定的数据库
+    
+    参数：dbname，str，创建的数据库的名称；
+             conn，           PostgreSQL服务器连接，由包 psycopg2 生成；
+             curs，            PostgreSQL服务器连接的游标，与conn相对应；
+    
+    返回值：None
+    """
+
+    # 设置数据库连接状态，创建数据库时，需要用到
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+
+    # 先删除该数据库，以确保代码可重复执行（这是确保代码可重复执行的常用策略）
+    try:
+        curs.execute("DROP DATABASE {} ;".format(dbname))
+        conn.commit()
+    except: 
+        conn.rollback()
+    
+    # 创建数据库
+    try:
+        curs.execute("CREATE DATABASE {};".format(dbname))
+        conn.commit()
+        print("{} 数据库创建成功".format(dbname))
+    except Exception as e:
+        print(e)
+        conn.rollback()
+        
+    return None
+
+def creat_conn_with_pg(
+    dbname = config.db_pg["db"],
+    host = config.db_pg["host"],
+    port = config.db_pg["port"], 
+    user = config.db_pg["user"],
+    password = config.db_pg["password"],
+ ):
+    try:
+        conn = psycopg2.connect(f"host = localhost port = {port} password= {password} dbname={dbname}  user={user}")  
+        curs  = conn.cursor()
+            
+        engine = create_engine(f'postgresql://{user}:{password}@localhost:{port}/{dbname}') 
+        
+    except:
+        try:
+            conn = psycopg2.connect(f"host = {host} port = {port} password= {password} dbname={dbname}  user={user}")  
+            curs  = conn.cursor()
+
+            engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{dbname}')
+        except:       
+            print('数据库连接创建失败')
+            
+    return conn, curs, engine
+
+def gen_multi_s_tuple(length):
+    """
+    目标：    生成一个由 %s 构成的元组，以供 SQL 语句所用；
+    参数：    length，int, 元组中元素的个数
+    返回值：形如（%s，%s）的元组
+    """
+    
+    multi_s = ','.join(['%s',]*length)
+    multi_s = '(' + multi_s + ')'
+    
+    return multi_s  
 
 # 通过数据库链接 engine。
-def conn():
+def curs(
+    dbname = config.db_pg["db"],
+    host = config.db_pg["host"],
+    port = config.db_pg["port"], 
+    user = config.db_pg["user"],
+    password = config.db_pg["password"],
+):
     try:
-        db = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PWD, MYSQL_DB, charset="utf8")
-        # db.autocommit = True
-    except Exception as e:
-        print("conn error :", e)
-    db.autocommit(on=True)
-    return db.cursor()
+        conn = psycopg2.connect(f"host = {host} port = {port} password= {password} dbname={dbname}  user={user}")  
+        curs  = conn.cursor()
+
+        # engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{dbname}')
+    except Exception as e:    
+        print('数据库连接创建失败',e)
+    conn.autocommit(on=True)
+    return curs
 
 
 # 定义通用方法函数，插入数据库表，并创建数据库主键，保证重跑数据的时候索引唯一。
 def insert_db(data, table_name, write_index, primary_keys):
     # 插入默认的数据库。
-    insert_other_db(MYSQL_DB, data, table_name, write_index, primary_keys)
+    insert_other_db(pg_db, data, table_name, write_index, primary_keys)
 
 
 # 增加一个插入到其他数据库的方法。
-def insert_other_db(to_db, data, table_name, write_index, primary_keys):
+def insert_other_db(dbname, data, table_name, write_index, primary_keys):
     # 定义engine
-    engine_mysql = engine_to_db(to_db)
+    engine_pg = engine_to_db(dbname)
     # 使用 http://docs.sqlalchemy.org/en/latest/core/reflection.html
     # 使用检查检查数据库表是否有主键。
-    insp = inspect(engine_mysql)
+    insp = inspect(engine_pg)
     col_name_list = data.columns.tolist()
     # 如果有索引，把索引增加到varchar上面。
     if write_index:
         # 插入到第一个位置：
         col_name_list.insert(0, data.index.name)
     print(col_name_list)
-    data.to_sql(name=table_name, con=engine_mysql, schema=to_db, if_exists='append',
+    data.to_sql(name=table_name, con=engine_pg, schema=dbname, if_exists='append',
                 dtype={col_name: NVARCHAR(length=255) for col_name in col_name_list}, index=write_index)
 
     # print(insp.get_pk_constraint(table_name))
@@ -80,7 +180,7 @@ def insert_other_db(to_db, data, table_name, write_index, primary_keys):
     # print(type(insp))
     # 判断是否存在主键
     if insp.get_pk_constraint(table_name)['constrained_columns'] == []:
-        with engine_mysql.connect() as con:
+        with engine_pg.connect() as con:
             # 执行数据库插入数据。
             try:
                 con.execute('ALTER TABLE `%s` ADD PRIMARY KEY (%s);' % (table_name, primary_keys))
@@ -92,35 +192,35 @@ def insert_other_db(to_db, data, table_name, write_index, primary_keys):
 
 # 插入数据。
 def insert(sql, params=()):
-    with conn() as db:
+    with curs() as db_curs:
         print("insert sql:" + sql)
         try:
-            db.execute(sql, params)
+            db_curs.execute(sql, params)
         except  Exception as e:
             print("error :", e)
 
 
 # 查询数据
 def select(sql, params=()):
-    with conn() as db:
+    with curs() as db_curs:
         print("select sql:" + sql)
         try:
-            db.execute(sql, params)
+            db_curs.execute(sql, params)
         except  Exception as e:
             print("error :", e)
-        result = db.fetchall()
+        result = db_curs.fetchall()
         return result
 
 
 # 计算数量
 def select_count(sql, params=()):
-    with conn() as db:
+    with curs() as db_curs:
         print("select sql:" + sql)
         try:
-            db.execute(sql, params)
+            db_curs.execute(sql, params)
         except  Exception as e:
             print("error :", e)
-        result = db.fetchall()
+        result = db_curs.fetchall()
         # 只有一个数组中的第一个数据
         if len(result) == 1:
             return int(result[0][0])
@@ -137,7 +237,7 @@ def run_with_args(run_fun):
         tmp_datetime_show = (tmp_datetime_show + datetime.timedelta(days=-1))
     tmp_datetime_str = tmp_datetime_show.strftime("%Y-%m-%d %H:%M:%S.%f")
     print("\n######################### hour_int %d " % tmp_hour_int)
-    str_db = "MYSQL_HOST :" + MYSQL_HOST + ", MYSQL_USER :" + MYSQL_USER + ", MYSQL_DB :" + MYSQL_DB
+    str_db = "pg_host :" + pg_host + ", pg_user :" + pg_user + ", pg_db :" + pg_db
     print("\n######################### " + str_db + "  ######################### ")
     print("\n######################### begin run %s %s  #########################" % (run_fun, tmp_datetime_str))
     start = time.time()
@@ -177,11 +277,12 @@ def run_with_args(run_fun):
 
 
 # 设置基础目录，每次加载使用。
-bash_stock_tmp = "/data/cache/hist_data_cache/%s/%s/"
-if not os.path.exists(bash_stock_tmp):
-    os.makedirs(bash_stock_tmp)  # 创建多个文件夹结构。
-    print("######################### init tmp dir #########################")
-
+bash_stock_tmp = "./data/cache/hist_data_cache/%s/%s/"
+def mkdir_for_bash_stock_tmp():
+    if not os.path.exists(bash_stock_tmp):
+        os.makedirs(bash_stock_tmp)  # 创建多个文件夹结构。
+        print("######################### init tmp dir #########################")
+# mkdir_for_bash_stock_tmp()
 
 # 增加读取股票缓存方法。加快处理速度。
 def get_hist_data_cache(code, date_start, date_end):

@@ -1,8 +1,14 @@
 # Alpha Quant
 
-## Res
+## data
 
 ### Third api
+
+#### akshare
+
+#### easyruatation
+
+#### tushare
 
 tushare.pro
 www.alphavantage.co
@@ -28,4 +34,35 @@ df = ts.get_today_all()
 df = ts.get_index()
 print(df)
 ```
-  
+
+#### BaoStock
+
+```
+pip install baostock -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+
+```
+
+#### efinance
+
+```
+pip install efinance
+```
+
+#### pyalgotrade-cn
+
+#### rqalpha easyhistory
+
+```bash
+pip3 install rqalpha
+
+## 下载股票历史数据
+rqalpha update_bundle
+
+
+```
+
+## trade
+
+### easytrader
+
+https://easytrader.readthedocs.io/zh/master/usage/
