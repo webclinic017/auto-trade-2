@@ -1,0 +1,42 @@
+# 金融中的机器学习
+
+- 金融中的机器学习
+  - 1 神经网络和基于梯度的优化
+    - 1.1 本书内容概要
+    - 1.2 什么是机器学习        
+    - 1.3 监督学习
+    - 1.4 无监督学习
+    - 1.5 强化学习
+    - 1.6 创建工作区
+      - Jupytor Notebook
+        - Kaggle
+        - Colab
+        - 深度学习计算机和 Anaconda 本地环境
+      - 安装 TensorFlow
+        - $ sudo pip install TensorFlow
+      - 安装 Keras
+        - $ sudo pip install Keras
+      - 使用本地数据
+        - https://www.kaggle.com/code/jannesklaas/machine-learning-for-finance-chapter-1-code
+        - 为了在本地使用书中示例程序对应的数据，请访问Kaggle平台的Notebook文件，并从平台下载对应的数据
+    - 1.7 使用 Kaggle 内核
+    - 1.8 使用AWS深度学习AMI
+    - 1.9 近似函数
+    - 1.10 前向传递
+    - 1.11 逻辑回归器
+    - 1.12 优化参数模型
+    - 1.13 评估模型损失
+    - 1.14 深度网络
+    - 1.15 keras 简介
+    - 1.16 张量计算图
+    - 1.17 练习
+    - 1.18 本章小节
+  - 2 机器学习在结构化数据中的应用
+  - 3 计算机视觉的应用
+  - 4 理解时间序列
+  - 5 用自然语言处理解析文本数据
+  - 6 生成模型的应用
+  - 7 金融市场中的强化学习
+  - 8 调试和发布产品
+  - 9 挑战偏见
+  - 10 贝叶斯推理和概率编程
