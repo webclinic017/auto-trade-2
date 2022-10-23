@@ -50,6 +50,23 @@ worker_number = 4
 time_local           = time.localtime()       # 提取本地时间
 date_of_today        = time.strftime("%Y-%m-%d", time_local) 
 
+start_date_v1 = "20000101"
+
+end_date_v1 = "20220729"
+
+start_date_list = [
+    start_date_v1,
+    "20220730",
+]
+
+end_date_list = [
+    end_date_v1,
+    "20221023",
+]
+
+start_date = "20220730"
+end_date = "20221023"
+
 # 1. 在数据库中创建数据表 a_k_dayly股票日k行情表 
 
 def create_db_table_k_dayly():
@@ -152,14 +169,18 @@ def get_stock_info_code_name():
                         con = engine2)
     return df
 
-def fetch_stock_zh_a_hist_to_db(symbol, period="daily", start_date="20000101", end_date='20220729', adjust=""):
+def fetch_stock_zh_a_hist_to_db(symbol, period="daily", start_date=start_date, end_date=end_date, adjust=""):
+    # ak.stock_zh_a_hist 可以在里面给 request 加入 timeout 参数
     hist_df = ak.stock_zh_a_hist(symbol=symbol, period=period, start_date=start_date, end_date=end_date, adjust=adjust)
     table_name = f'stock_zh_a_hist_{period}_{symbol}_em'
     hist_df["code"] = symbol
     hist_df.to_sql(table_name,
           engine2,
-          index     = False,
-          if_exists = 'replace')    # 写入数据库  还有一个参数是  append，那是附加在表后
+          index     = False, # 布尔值，默认为True，将DataFrame索引写为列。使用index_label作为表中的列名。
+        #   index_label=  "time",
+        #   if_exists = 'replace', # 在插入新值之前删除表
+          if_exists = 'append', # 将新值插入现有表。
+    )    # 写入数据库  还有一个参数是  append，那是附加在表后
     
     #添加索引
     try:
@@ -174,7 +195,7 @@ def fetch_stock_zh_a_hist_to_db(symbol, period="daily", start_date="20000101", e
         print(e)
         conn2.rollback()
 
-def get_stock_zh_a_hist(symbol, period="daily", start_date="20000101", end_date='20220729', adjust=""):
+def get_stock_zh_a_hist(symbol, period="daily", start_date=start_date, end_date=end_date, adjust=""):
     df = pd.read_sql_query(f"""SELECT *
                                    FROM stock_zh_a_hist_{period}_{symbol}_em;""",
                         con = engine2)
@@ -350,7 +371,7 @@ if __name__ == '__main__':
     pool = Pool(worker_number) # parallel_procedure_number 给出了并行执行的进程数
     
     for i in range(worker_number):
-        time.sleep(10)    # 缺省值设成了 0.1，实际运行设高一点，以免各个进程在查询数据库时相互竞争...
+        time.sleep(3)    # 缺省值设成了 0.1，实际运行设高一点，以免各个进程在查询数据库时相互竞争...
         print('提醒：正在开启第 {} 个并行子进程'.format(i))
         pool.apply_async(task_run, (i, worker_number))
     pool.close()

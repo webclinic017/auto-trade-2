@@ -200,7 +200,7 @@ def get_stock_data(stock='600031'):
 
     #保持实时数据
 
-    df1.to_excel(r'C:\Users\Administrator\Desktop\股票数据.xlsx')
+    df1.to_excel(r'./data/股票数据.xlsx')
 
     print('股票数据输出完成')
 

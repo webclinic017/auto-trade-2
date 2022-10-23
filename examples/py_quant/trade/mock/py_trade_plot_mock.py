@@ -44,7 +44,7 @@ import quantstats as qs
 
 def get_stock_plot():
 
-    df1=pd.read_excel(r'C:\Users\Administrator\Desktop\股票数据.xlsx')
+    df1=pd.read_excel(r'./data/股票数据.xlsx')
 
     df1.rename(columns={'时间':'Date','开盘价':'Open','收盘价':'Close','最高价':'High','最低价':'Low','成交量':'Volume'},inplace=True)
 
@@ -82,7 +82,7 @@ def get_zf_plot():
 
     plt.rcParams['axes.unicode_minus']=False
 
-    df=pd.read_excel(r'C:\Users\Administrator\Desktop\账户数据.xlsx')
+    df=pd.read_excel(r'./data/账户数据.xlsx')
 
     plt.plot(df['可用现金'],label='可用现价',color='r')
 
@@ -98,7 +98,7 @@ def get_zf_plot():
 
 def get_quantstats_any():
 
-    df=pd.read_excel(r'C:\Users\Administrator\Desktop\股票数据.xlsx')
+    df=pd.read_excel(r'./data/股票数据.xlsx')
 
     df.rename(columns={'时间':'Date','开盘价':'Open','收盘价':'Close','最高价':'High','最低价':'Low','成交量':'Volume'},inplace=True)
 
@@ -120,7 +120,7 @@ def get_quantstats_any():
 
 def get_technology_zb():
 
-    df=pd.read_excel(r'C:\Users\Administrator\Desktop\股票数据.xlsx')
+    df=pd.read_excel(r'./data/股票数据.xlsx')
 
     df.rename(columns={'开盘价':'Open','收盘价':'Close','最高价':'High','最低价':'Low','成交量':'Volume'},inplace=True)
 

@@ -1,5 +1,5 @@
 
-import py_trade_quotation_mock
+import py_trade_quotation_mock as py_trade_quotation
 
 import time
 
@@ -11,7 +11,7 @@ import akshare as ak
 
 import pyautogui
 
-trader.get_login()
+# trader.get_login()
 
 import pyttsx3
 
@@ -35,9 +35,9 @@ while True:
 
         name=df9['名称'].to_list()[0]
 
-        get_stock_data.get_stock_data()
+        py_trade_quotation.get_stock_data()
 
-        df=pd.read_excel(r'C:\Users\Administrator\Desktop\股票数据.xlsx')
+        df=pd.read_excel(r'./data/股票数据.xlsx')
 
         df['ma5']=df['现价'].rolling(5).mean()
 

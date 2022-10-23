@@ -10,6 +10,8 @@ import selenium
 
 import pyautogui
 
+import os
+import platform
 import time
 
 #爬新浪财经股票实时信息
@@ -60,9 +62,33 @@ fdykb_data=[]
 
 xddjzj_data=[]
 
+def get_driver():
+    os_type = platform.system()
+    # root_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname("./")
+    # drivers_dir = os.path.join(root_dir, 'drivers')
+    drivers_dir = os.path.dirname("/Users/afirez/studio/python/auto-trade/examples/weixin/drivers/")
+    if os_type == 'Darwin':
+        return os.path.join(drivers_dir, 'chromedriver_mac64')
+    elif os_type == 'Windows':
+        return os.path.join(drivers_dir, 'chromedriver_win32.exe')
+    elif os_type == 'Linux':
+        return os.path.join(drivers_dir, 'chromedriver_linux64')
+    else:
+        return None
+
+driver_location = get_driver()
+if driver_location is None:
+    print('chromedriver 不支持的系统类型！')
+    exit(-1)
+
 global driver
 
-driver=webdriver.Firefox()
+# driver=webdriver.Firefox()
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
+driver = webdriver.Chrome(driver_location,chrome_options=chrome_options)
 
 def get_login():
 
@@ -246,7 +272,7 @@ def get_zf_data():
 
     df2=pd.DataFrame({'可用现金':cash_data,'总资产':money_data,'参考市值':cksz_data,'浮动盈亏':fdyk_data,'浮动盈亏比':fdyk_data,'下单冻结资金':xddjzj_data})
 
-    df2.to_excel(r'C:\Users\Administrator\Desktop\账户数据.xlsx')
+    df2.to_excel(r'./data/账户数据.xlsx')
 
     print('账户数据输出完成')
 

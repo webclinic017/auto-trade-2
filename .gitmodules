@@ -1,0 +1,6 @@
+[submodule "modules/Ashare"]
+	path = modules/Ashare
+	url = git@github.com:afirez/Ashare.git
+[submodule "modules/qteasy"]
+	path = modules/qteasy
+	url = git@github.com:afirez/qteasy.git

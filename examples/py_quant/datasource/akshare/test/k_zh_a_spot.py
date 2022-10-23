@@ -7,8 +7,8 @@ import sys
 sys.path.append('/Users/afirez/studio/python/auto-trade/examples/py_quant/common')
 sys.path.append('/Users/afirez/studio/python/auto-trade/examples/py_quant/common/common_pg.py')
 
-print("sys.path:",sys.path)
-import common_pg as common_db
+# print("sys.path:",sys.path)
+# import common_pg as common_db
 
 print(ak.__version__)
 
