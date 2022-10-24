@@ -41,3 +41,25 @@ kubectl describe service frontend | grep NodePort
 curl https://2886795285-30080-elsy06.environments.katacoda.com
 
 ```
+
+## docker & Redis
+
+```bash
+mkdir -p ~/apps/redis/data
+#写入redis默认配置
+vim ~/apps/redis/redis.conf
+#content
+#bind 127.0.0.1 //允许远程连接
+#protected-mode no
+#appendonly yes //持久化
+#requirepass 2419 //密码 
+
+docker pull redis
+
+docker run --name redis -p 6379:6379 \
+-v ~/apps/redis/data:/data \
+-v ~/apps/redis/redis.conf:/etc/redis.conf \
+-d redis redis-server /etc/redis.conf --requirepass "123456"
+
+docker exec -it redis redis-cli
+```

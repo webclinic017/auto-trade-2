@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+
+  redis_slave1:
+    image: redis
+    command: redis-server --slaveof redis 6379
+
+  redis_slave2:
+    image: redis
+    command: redis-server --slaveof redis 6379
