@@ -4,3 +4,6 @@
 [submodule "modules/qteasy"]
 	path = modules/qteasy
 	url = git@github.com:afirez/qteasy.git
+[submodule "modules/quant_from_scratch"]
+	path = modules/quant_from_scratch
+	url = https://gitee.com/afirez/quant_from_scratch.git

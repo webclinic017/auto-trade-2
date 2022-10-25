@@ -306,7 +306,7 @@ async def run_loop():
             stock_zh_a_spot_em_df = await stock_zh_a_spot_em_async()
             print(f'cost time: {time.time() - start_time}')
             print(stock_zh_a_spot_em_df)
-            await asyncio.sleep(0.45)
+            await asyncio.sleep(0.100)
             print(f'cost time with sleep: {time.time() - start_time}')
         except Exception as e:
             print(f'cost time: {time.time() - start_time}, error: {e}')
