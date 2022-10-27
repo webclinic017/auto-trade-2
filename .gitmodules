@@ -7,3 +7,18 @@
 [submodule "modules/quant_from_scratch"]
 	path = modules/quant_from_scratch
 	url = https://gitee.com/afirez/quant_from_scratch.git
+[submodule "modules/qlib"]
+	path = modules/qlib
+	url = https://github.com/microsoft/qlib.git
+[submodule "modules/qlib_tutorial"]
+	path = modules/qlib_tutorial
+	url = git@github.com:afirez/qlib_tutorial.git
+[submodule "modules/backtrader_tutorial"]
+	path = modules/backtrader_tutorial
+	url = git@github.com:afirez/backtrader.git
+[submodule "modules/backtrader_lib"]
+	path = modules/backtrader_lib
+	url = https://github.com/mementum/backtrader.git
+[submodule "modules/akshare"]
+	path = modules/akshare
+	url = git@github.com:afirez/akshare.git
