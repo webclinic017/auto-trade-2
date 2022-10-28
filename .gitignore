@@ -206,3 +206,6 @@ buck-out/
 /ios/Pods/
 
 ### rn ###
+
+### other ### 
+/examples/py_quant/qlib/mlruns/
