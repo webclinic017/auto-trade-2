@@ -1,0 +1,81 @@
+version: '3'
+services:
+    mongo:
+        image: mongo:4.2
+    # mkdir -p ~/apps/mongo/data/
+        volumes:
+            - ~/apps/mongo/data:/data/db   # /data/db是container中存放数据位置
+        ports:
+            - 27017:27017
+        restart: always
+
+    mongo-express:
+        links:
+            - mongo  # 这里关联到mongo的container
+        image: mongo-express
+        restart: always
+        ports:
+        - 8081:8081
+        environment:
+            ME_CONFIG_BASICAUTH_USERNAME: mongo
+            ME_CONFIG_BASICAUTH_PASSWORD: 123456
+    
+    # mkdir -p ~/apps/mysql/data/ && mkdir -p ~/apps/mysql/conf.d/
+    redis:
+    mysql:
+        image: mysql
+        ports:
+            - 33060:33060
+            - 3306:3306
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        volumes:
+            - ~/apps/mysql/data:/var/lib/mysql
+            - ~/apps/mysql/conf.d:/etc/mysql/conf.d
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456    
+            
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+    # mkdir -p ~/apps/redis/data/ && mkdir -p ~/apps/redis/conf/
+    redis:
+        image: redis
+        restart: always
+        command: redis-server /usr/local/etc/redis/redis.conf
+        ports:
+            - 6379:6379
+        volumes:
+            - ~/apps/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+            - ~/apps/redis/data/:/data/
+
+# MySQL 配置
+# vim ~/apps/mysql/conf.d/my.cnf
+# [mysqld]
+# user=mysql
+# default-storage-engine=INNODB
+# character-set-server=utf8
+# [client]
+# default-character-set=utf8
+# [mysql]
+# default-character-set=utf8
+
+# vim ./redis/conf/redis.conf
+# requirepass 123456  #这是密码
+
+# stop-writes-on-bgsave-error no
+# rdbcompression no
+# dbfilename dump.rdb
+
+# appendonly yes
+# appendfsync everysec
+# no-appendfsync-on-rewrite no
+# auto-aof-rewrite-percentage 100
+# auto-aof-rewrite-min-size 64mb
+
+# dir /data/
+
+
