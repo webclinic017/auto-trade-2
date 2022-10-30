@@ -22,3 +22,51 @@
 [submodule "modules/akshare"]
 	path = modules/akshare
 	url = git@github.com:afirez/akshare.git
+[submodule "modules/Machine-Learning-Trader"]
+	path = modules/Machine-Learning-Trader
+	url = https://github.com/tyedem/Machine-Learning-Trader.git
+[submodule "modules/Books-Recommendation-System"]
+	path = modules/Books-Recommendation-System
+	url = https://github.com/tyedem/Books-Recommendation-System.git
+[submodule "modules/Machine-Learning-for-Algorithmic-Trading-Bots-with-Python"]
+	path = modules/Machine-Learning-for-Algorithmic-Trading-Bots-with-Python
+	url = git@github.com:afirez/Machine-Learning-for-Algorithmic-Trading-Bots-with-Python.git
+[submodule "modules/Machine-Learning-for-Algorithmic-Trading-Second-Edition_Original"]
+	path = modules/Machine-Learning-for-Algorithmic-Trading-Second-Edition_Original
+	url = git@github.com:afirez/Machine-Learning-for-Algorithmic-Trading-Second-Edition_Original.git
+[submodule "modules/Hands-On-Machine-Learning-for-Algorithmic-Trading"]
+	path = modules/Hands-On-Machine-Learning-for-Algorithmic-Trading
+	url = git@github.com:afirez/Hands-On-Machine-Learning-for-Algorithmic-Trading.git
+[submodule "modules/Book-Mathmatical-Foundation-of-Reinforcement-Learning"]
+	path = modules/Book-Mathmatical-Foundation-of-Reinforcement-Learning
+	url = git@github.com:afirez/Book-Mathmatical-Foundation-of-Reinforcement-Learning.git
+[submodule "modules/Machine-Learning-for-Finance"]
+	path = modules/Machine-Learning-for-Finance
+	url = git@github.com:afirez/Machine-Learning-for-Finance.git
+[submodule "modules/easytrader"]
+	path = modules/easytrader
+	url = git@github.com:afirez/easytrader.git
+[submodule "modules/easyquotation"]
+	path = modules/easyquotation
+	url = git@github.com:afirez/easyquotation.git
+[submodule "modules/stock"]
+	path = modules/stock
+	url = git@github.com:afirez/stock.git
+[submodule "modules/easyquant"]
+	path = modules/easyquant
+	url = git@github.com:afirez/easyquant.git
+[submodule "modules/Hands-On-Deep-Learning-for-Finance"]
+	path = modules/Hands-On-Deep-Learning-for-Finance
+	url = git@github.com:afirez/Hands-On-Deep-Learning-for-Finance.git
+[submodule "modules/Deep-Reinforcement-Learning-Book"]
+	path = modules/Deep-Reinforcement-Learning-Book
+	url = git@github.com:afirez/Deep-Reinforcement-Learning-Book.git
+[submodule "modules/Math-for-Programmers"]
+	path = modules/Math-for-Programmers
+	url = git@github.com:afirez/Math-for-Programmers.git
+[submodule "modules/DRLPytorch"]
+	path = modules/DRLPytorch
+	url = git@github.com:afirez/DRLPytorch.git
+[submodule "modules/Applied-Deep-Learning-and-Computer-Vision-for-Self-Driving-Cars"]
+	path = modules/Applied-Deep-Learning-and-Computer-Vision-for-Self-Driving-Cars
+	url = git@github.com:afirez/Applied-Deep-Learning-and-Computer-Vision-for-Self-Driving-Cars.git
