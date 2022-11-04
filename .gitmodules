@@ -73,3 +73,6 @@
 [submodule "modules/FinRL"]
 	path = modules/FinRL
 	url = https://github.com/AI4Finance-Foundation/FinRL.git
+[submodule "modules/aiif"]
+	path = modules/aiif
+	url = git@github.com:afirez/aiif.git
