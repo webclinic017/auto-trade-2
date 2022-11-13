@@ -76,3 +76,9 @@
 [submodule "modules/aiif"]
 	path = modules/aiif
 	url = git@github.com:afirez/aiif.git
+[submodule "modules/rlfinance"]
+	path = modules/rlfinance
+	url = https://github.com/yhilpisch/rlfinance.git
+[submodule "modules/py4at"]
+	path = modules/py4at
+	url = https://github.com/yhilpisch/py4at.git
