@@ -250,6 +250,7 @@ def result_json2df(data_json):
     temp_df.reset_index(inplace=True)
     temp_df["index"] = temp_df.index + 1
     temp_df.rename(columns={"index": "序号"}, inplace=True)
+    print(temp_df)
     temp_df = temp_df[
         [
             "序号",
