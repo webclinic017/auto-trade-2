@@ -82,3 +82,6 @@
 [submodule "modules/py4at"]
 	path = modules/py4at
 	url = https://github.com/yhilpisch/py4at.git
+[submodule "modules/btgym"]
+	path = modules/btgym
+	url = https://github.com/Kismuz/btgym.git
