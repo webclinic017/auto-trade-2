@@ -40,9 +40,9 @@ g_available_days_limit = 60
 # 历史数据开始时间
 g_start_date = '1990-12-19'
 # BaoStock日线数据字段
-g_data_daily_fields = 'date,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ, psTTM,pcfNcfTTM,isST'
+g_data_daily_fields_bs = 'date,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ, psTTM,pcfNcfTTM,isST'
 
-g_data_daily_fields_saved = ['date','open', 'high', 'low', 'close', 'preclose', 'volume', 'amount', 'turn', 'pctChg']
+g_data_daily_fields_saved_bs = ['date','open', 'high', 'low', 'close', 'preclose', 'volume', 'amount', 'turn', 'pctChg']
 
 # 市场所有股票代码表 stock_a_codes
 # 1d 存储表 f'stock_a_history_1d_{code}'
@@ -51,7 +51,7 @@ g_data_daily_fields_saved = ['date','open', 'high', 'low', 'close', 'preclose', 
 # 存储基本字段
 g_data_1d_fields_ak = ['date','open', 'close', 'high', 'low', 'volume', 'amount', 'amplitude',  'pctChg', 'chg', 'turn']
 
-# 因子 涨停，双神， 选股
+# 因子 涨停，双神，选股
 g_data_1d_factor_ext = ['zt', 'ss', 'candidate'] 
 
 # 定时上传到ptrade的文件路径
@@ -210,7 +210,7 @@ def wrap_query_a_all_stock_code_ak(date):
 
 def wrap_query_history_k_data_plus_ak(
     code, 
-    data_fields=g_data_daily_fields,
+    data_fields=g_data_daily_fields_bs,
     start_date=g_start_date, 
     end_date=datetime.date.today().strftime('%Y-%m-%d'),
     period='daily', 
@@ -324,7 +324,7 @@ def wrap_query_all_stock(date):
 
 
 @bs_func_decorator
-def wrap_query_history_k_data_plus(code, data_fields=g_data_daily_fields,
+def wrap_query_history_k_data_plus(code, data_fields=g_data_daily_fields_bs,
                                    start_date=g_start_date, end_date=datetime.date.today().strftime('%Y-%m-%d'),
                                    frequency='d', adjust='2'):
     """
@@ -625,11 +625,18 @@ def get_trading_date(date=None):
         trading_date = date
 
     # 查询股票数据，query_all_stock与K线在17:30同时更新,向trading_date前寻找有K线数据的日期
-    # while 0 == wrap_query_all_stock(trading_date).shape[0]:
-    while 0 == wrap_query_a_summary_ak(trading_date.replace('-','', 2)).shape[0]:
-        # trading_date向历史移动1天
-        trading_date = (datetime.datetime.strptime(trading_date, '%Y-%m-%d') - datetime.timedelta(days=1)).strftime(
-            '%Y-%m-%d')
+    if False:
+        # use baostock
+        while 0 == wrap_query_all_stock(trading_date).shape[0]:
+            # trading_date向历史移动1天
+            trading_date = (datetime.datetime.strptime(trading_date, '%Y-%m-%d') - datetime.timedelta(days=1)).strftime(
+                '%Y-%m-%d')
+    else:
+        # use akshare
+        while 0 == wrap_query_a_summary_ak(trading_date.replace('-','', 2)).shape[0]:
+            # trading_date向历史移动1天
+            trading_date = (datetime.datetime.strptime(trading_date, '%Y-%m-%d') - datetime.timedelta(days=1)).strftime(
+                '%Y-%m-%d')
 
     # 返回最近交易日日期
     return trading_date
@@ -1103,7 +1110,9 @@ def update_trade(stock_codes):
     write_easymoney_candidates(df)
 
     # 更新ptrade交易数据
-    # update_ptrade(df)
+
+    if False:
+        update_ptrade(df)
 
 
 def update_ptrade(df):
@@ -1506,5 +1515,7 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    task_update_daily()
+    if False:
+        main()
+    else:
+        task_update_daily()
