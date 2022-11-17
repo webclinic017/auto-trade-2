@@ -172,7 +172,7 @@ def get_stock_info_code_name():
 def fetch_stock_zh_a_hist_to_db(symbol, period="daily", start_date=start_date, end_date=end_date, adjust=""):
     # ak.stock_zh_a_hist 可以在里面给 request 加入 timeout 参数
     hist_df = ak.stock_zh_a_hist(symbol=symbol, period=period, start_date=start_date, end_date=end_date, adjust=adjust)
-    table_name = f'stock_zh_a_hist_{period}_{symbol}_em'
+    table_name = f'stock_a_history_{period}_{symbol}'
     hist_df["code"] = symbol
     hist_df.to_sql(table_name,
           engine2,
@@ -197,7 +197,7 @@ def fetch_stock_zh_a_hist_to_db(symbol, period="daily", start_date=start_date, e
 
 def get_stock_zh_a_hist(symbol, period="daily", start_date=start_date, end_date=end_date, adjust=""):
     df = pd.read_sql_query(f"""SELECT *
-                                   FROM stock_zh_a_hist_{period}_{symbol}_em;""",
+                                   FROM stock_a_history_{period}_{symbol};""",
                         con = engine2)
     return df
 
