@@ -125,7 +125,7 @@ def create_pg_engine():
     db_engine = sqlalchemy.create_engine(
         url=f'postgresql://{user}:{password}@{host}:{port}/{dbname}',
         encoding='utf8',
-        convert_unicode=True,
+        # convert_unicode=True,
         # isolation_level='AUTOCOMMIT',
         # pool_size= get_process_num() * 2, 
         # max_overflow=get_process_num() * 2, 
@@ -491,8 +491,15 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
             start_date = g_start_date
 
     # 下载日线数据
-    out_df = wrap_query_history_k_data_plus_ak(
-        code, start_date=start_date, end_date=latest_trading_date, adjust=adjust)
+    try:
+        out_df = wrap_query_history_k_data_plus_ak(
+            code, start_date=start_date, end_date=latest_trading_date, adjust=adjust)
+    except Exception as e:
+        with open('./error.txt', mode='w') as f:
+            print(f'下载 error {code} start {start_date} end {latest_trading_date}:', file=f) 
+        # 关闭数据库连接
+        engine.dispose()
+        return latest_series  
 
     # 剔除停盘数据
     if out_df.shape[0]:
@@ -649,14 +656,30 @@ def query_dividend(code, date):
     :param date: 指定日期
     :return: 在指定日期后除权除息返回True，否则返回False
     """
-
+    code_ = code.replace('sz', '').replace('sh', '').replace('XSHG', '').replace('XSHE', '').replace('.', '')
+    if code_.startswith('60'):
+        code_ = f'sh.{code_}'
+    elif code_.startswith('00') or code_.startswith('30'):
+        code_ = f'sz.{code_}'
+    elif code_.startswith('68'):
+        code_ = f'sh.{code_}'
+        return False
+    elif code_.startswith('8'):
+        code_ = f'bj.{code_}'
+        return False
+    else:
+        return False
     # 查询除权除息数据
-    rs_df = wrap_query_dividend_data(code, date[:4])
+    rs_df = wrap_query_dividend_data(code_, date[:4])
 
     # 在指定日期后除权除息返回True，否则返回False
-    if rs_df.shape[0] and rs_df['dividOperateDate'].iloc[-1] >= date:
-        return True
-    else:
+    try:
+        if rs_df.shape[0] and rs_df['dividOperateDate'].iloc[-1] >= date:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f'除权除息 error {code}')
         return False
 
 def extend_factor(df):
