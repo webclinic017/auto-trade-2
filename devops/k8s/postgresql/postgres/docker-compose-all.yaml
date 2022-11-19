@@ -1,0 +1,158 @@
+version: '4.0'
+services:
+  # mkdir -p ~/apps/postgres/data/
+  postgres:
+    container_name: postgres
+    image: postgres:14.1-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: k_house
+    volumes:
+      # - ~/postgres/data/:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    # networks:
+    #   - postgres
+    restart: unless-stopped
+
+  # mysql:
+  #   # container_name: mysql
+  #   image: mysql:5.7
+  #   environment:
+  #     MYSQL_USER: alphazz
+  #     MYSQL_PASSWORD: alphazz
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: k_house
+  #   ports:
+  #     - 3306:3306
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  # adminer:
+  #   image: adminer
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - postgres
+  
+  # mkdir -p ~/apps/mongo/data/
+  # pip3 install arctic
+  # pip3 install git+https://github.com/man-group/arctic.git
+  mongo:
+    container_name: mongo
+    image: mongo:4.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo:/data/db
+      # - ~/apps/mongo/data:/data/db   # /data/db是container中存放数据位置
+    networks:
+      - postgres
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+  mongo-express:
+    links:
+      - mongo  # 这里关联到 mongo 的 container
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: mongo
+      ME_CONFIG_BASICAUTH_PASSWORD: mongo
+    ports:
+      - 8081:8081
+    restart: unless-stopped
+  
+  neo4j:
+      container_name: neo4j
+      image: neo4j
+      volumes:
+         - neo4j:/var/lib/neo4j/data
+      ports:
+        - "7474:7474" 
+        - "7687:7687"
+      restart: unless-stopped
+  
+  # postgis:
+  #     container_name: postgis
+  #     image: mdillon/postgis
+  #     environment:
+  #       POSTGRES_PASSWORD: postgres
+  #     volumes:
+  #        - postgres:/var/lib/postgresql/data
+  #     ports:
+  #       - "5432:5432"
+  #     restart: unless-stopped
+
+  # mkdir -p ~/apps/redis/data/ && mkdir -p ~/apps/redis/conf/
+  # 写入redis默认配置
+  # 
+  # vim ~/apps/redis/conf/redis.conf
+  # 
+  # bind 127.0.0.1 //允许远程连接
+  # protected-mode no
+  # appendonly yes //持久化
+  # requirepass root //密码 
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    # image: redis:6.2.6-alpine
+    environment:
+      - TZ=Asia/Shanghai # 设置时区=value
+    volumes:
+      - redis:/data
+      # - ~/apps/redis/data:/data
+      # - ~/apps/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      # - $PWD/redis-data:/var/lib/redis
+      # - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    networks:
+      - postgres
+    restart: unless-stopped
+    # command: redis-server /usr/local/etc/redis/redis.conf
+    # command: redis-server --requirepass root
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+  
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx
+  #   ports:
+  #     - "8000:80"
+  #   restart: unless-stopped
+
+  # docker exec -it grafana bash
+  #   grafana-cli plugins install redis-datasource 
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  
+  # prometheus.yml
+  # global:
+  #   scrape_interval: 5s 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - ~/apps/prometheus/conf/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 3001:3001
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+  mongo:
+  neo4j:
+  redis:

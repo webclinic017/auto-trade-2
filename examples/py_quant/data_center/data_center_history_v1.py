@@ -8,6 +8,8 @@ import pandas as pd
 import multiprocessing
 import time
 import sqlalchemy
+# import psycopg2
+# import pymysql
 import matplotlib.pyplot as plt
 from pandas.plotting import table
 import math
@@ -70,7 +72,8 @@ db_pg = {
     # "host": "192.168.31.110",
     # "host": "192.168.0.135",
     "host": "127.0.0.1",
-    "port": 5433, # alpha-pg 
+    # "port": 5433, # alpha-pg 
+    "port": 5432, # devops/k8s/postgresql/postgres/docker-compose.yaml 
     "user": "postgres",
     "password": "postgres",
     "db": "k_house",
@@ -83,6 +86,20 @@ db_mysql = {
     "password": "root",
     "db": "k_house",
 }
+
+class DBEngine:
+    engine = None
+
+    @staticmethod
+    def get_engine():
+        if DBEngine.engine == None:
+            DBEngine.engine = create_db_engine()
+        return DBEngine.engine
+
+    @staticmethod
+    def dispose():
+        if DBEngine.engine != None:
+            DBEngine.engine.dispose()
 
 def create_pg_engine():
     """
@@ -127,9 +144,9 @@ def create_pg_engine():
         encoding='utf8',
         # convert_unicode=True,
         # isolation_level='AUTOCOMMIT',
-        # pool_size= get_process_num() * 2, 
-        # max_overflow=get_process_num() * 2, 
-        # pool_timeout=50,
+        pool_size= get_process_num() * 2, 
+        max_overflow=get_process_num() * 2, 
+        pool_timeout=50,
     )
 
     # 返回引擎对象
@@ -354,7 +371,7 @@ def wrap_query_dividend_data(code, year, yearType='report'):
     """
     return bs.query_dividend_data(code, year, yearType=yearType)
 
-def get_stock_codes(date=None, update=False):
+def get_stock_codes(date=None, update=False, engine = None):
     """
     获取指定日期前（含当日）最近交易日的A股代码列表
 
@@ -367,10 +384,11 @@ def get_stock_codes(date=None, update=False):
     """
 
     print('正在获取股票代码...')
-
+    engine_created = engine == None
     # 创建数据库引擎对象
-    # engine = create_db_engine()
-    engine = create_pg_engine()
+    if engine == None:
+        engine = create_db_engine()
+    # engine = create_pg_engine()
 
     # 数据库中股票代码的表名
     table_name = 'stock_a_codes'
@@ -396,8 +414,9 @@ def get_stock_codes(date=None, update=False):
         # 将股票代码写入数据库
         stock_df.to_sql(name=table_name, con=engine, if_exists='replace', index=False, index_label=False)
 
-        # 关闭数据库连接
-        engine.dispose()
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
 
         # 返回股票列表
         return stock_df['code'].tolist()
@@ -411,13 +430,14 @@ def get_stock_codes(date=None, update=False):
         # 读取sql
         stock_codes = pd.read_sql(sql=sql_cmd, con=engine)['code'].tolist()
 
-        # 关闭数据库连接
-        engine.dispose()
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
 
         # 返回股票列表
         return stock_codes
 
-def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq', recreate=False):
+def update_data(code, latest_trading_date, db_tables, use_g_engine, query_days=60, adjust='qfq', recreate=False):
     """
     更新日线数据，计算相关因子
 
@@ -434,9 +454,12 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
     # 股票数据在数据库中的表名
     table_name = f'stock_a_history_1d_{code}'
     print(f'正在更新{code} table name: {table_name}...')
-
-    # 创建数据库引擎对象
-    engine = create_db_engine()
+    engine_created = use_g_engine != True
+    if engine_created:
+        # 创建数据库引擎对象
+        engine = create_db_engine()
+    else:
+        engine = DBEngine.get_engine()
 
     # 创建空Series存储最新一日的数据
     latest_series = pd.Series(dtype='float64')
@@ -476,8 +499,9 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
             latest_series['code'] = code
             print('{}当前已为最新数据'.format(code))
 
-            # 关闭数据库连接
-            engine.dispose()
+            if engine_created:
+                # 关闭数据库连接
+                engine.dispose()
 
             return latest_series
 
@@ -497,8 +521,11 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
     except Exception as e:
         with open('./error.txt', mode='w') as f:
             print(f'下载 error {code} start {start_date} end {latest_trading_date}:', file=f) 
-        # 关闭数据库连接
-        engine.dispose()
+        
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
+        
         return latest_series  
 
     # 剔除停盘数据
@@ -507,9 +534,9 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
 
     # 如果数据为空，则不更新
     if not out_df.shape[0]:
-        # 关闭数据库连接
-        engine.dispose()
-
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
         return latest_series
 
     # 将数值数据转为float型，便于后续处理
@@ -527,8 +554,9 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
 
     # 如果数据少于query_days，则不更新
     if out_df.shape[0] < query_days:
-        # 关闭数据库连接
-        engine.dispose()
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
 
         return latest_series
 
@@ -559,8 +587,9 @@ def update_data(code, latest_trading_date, db_tables, query_days=60, adjust='qfq
     # 将更新数据写入数据库
     out_df.to_sql(name=table_name, con=engine, if_exists=if_exists, index=False)
 
-    # 关闭数据库连接
-    engine.dispose()
+    if engine_created:
+        # 关闭数据库连接
+        engine.dispose()
 
     # 将更新的最后一行添加code字段，append到latest_df中
     latest_series = out_df.iloc[-1].copy()
@@ -581,7 +610,7 @@ def update_data_mp(stock_codes):
     """
 
     # 创建数据库引擎实例
-    engine = create_db_engine()
+    engine = DBEngine.get_engine()
 
     # 获取数据库内所有表的表名
     db_tables = sqlalchemy.inspect(engine).get_table_names()
@@ -591,13 +620,13 @@ def update_data_mp(stock_codes):
 
     # test
     # code = stock_codes[0]
-    # update_data(code, trading_date, db_tables)
+    # update_data(code, trading_date, db_tables, engine)
     # return
     # test
 
     # 多进程更新数据，获取最新日线数据的DataFrame
     with multiprocessing.Pool(processes=get_process_num()) as pool:
-        rs = pool.starmap(update_data, [(code, trading_date, db_tables) for code in stock_codes])
+        rs = pool.starmap(update_data, [(code, trading_date, db_tables, True) for code in stock_codes])
 
     # 删除空值
     rs = [s for s in rs if 0 != len(s)]
@@ -607,9 +636,10 @@ def update_data_mp(stock_codes):
 
     # 将所有股票最新日线数据写入数据库表latest
     if latest_df.shape[0]:
-        latest_df.to_sql(name='latest', con=create_db_engine(), if_exists='replace', index=False)
+        latest_df.to_sql(name='latest', con=engine, if_exists='replace', index=False)
 
     # 关闭数据库连接
+    DBEngine.engine = None
     engine.dispose()
 
     print('完成数据更新')
@@ -989,7 +1019,7 @@ def profit_loss_statistic(code, hold_days=10):
 
     return candidate_df
 
-def update_latest_table(code):
+def update_latest_table(code, use_g_engine):
     """
     更新数据库中最新日线数据表
 
@@ -1004,25 +1034,32 @@ def update_latest_table(code):
     table_name = f'stock_a_history_1d_{code}'
     print(f'正在更新 {code} table name: {table_name}...')
 
-    # 创建数据库引擎对象
-    engine = create_db_engine()
+    engine_created = use_g_engine != True
+    if engine_created:
+        # 创建数据库引擎对象
+        engine = create_db_engine()
+    else:
+        engine = DBEngine.get_engine()
+
 
     # 创建空的DataFrame
     latest_df = pd.DataFrame()
 
     # 判断是否存在该表，不存在则跳过
     if table_name not in sqlalchemy.inspect(engine).get_table_names():
-        # 关闭数据库连接
-        engine.dispose()
+        if engine_created:
+            # 关闭数据库连接
+            engine.dispose()
 
         return latest_df
 
     # 从数据库中读取股票的最新一天数据
     sql_cmd = 'SELECT * FROM {} ORDER BY date DESC LIMIT 1;'.format(table_name)
     df = pd.read_sql(sql=sql_cmd, con=engine)
-
-    # 关闭数据库连接
-    engine.dispose()
+    
+    if engine_created:
+        # 关闭数据库连接
+        engine.dispose()
 
     # 有缺失字段就不参与候选
     if np.any(df.isnull()):
@@ -1045,17 +1082,27 @@ def update_latest_table_mp(stock_codes):
     :param stock_codes: 待更新数据的股票代码
     :return: 包含所有待处理股票的最新日线数据的DataFrame
     """
+    use_g_engine = True
+    engine_created = use_g_engine != True
+    if engine_created:
+        # 创建数据库引擎对象
+        engine = create_db_engine()
+    else:
+        engine = DBEngine.get_engine()
 
     # 多进程更新最新日线数据表，获取该表数据的DataFrame
     with multiprocessing.Pool(processes=get_process_num()) as pool:
-        rs = pool.map(update_latest_table, stock_codes)
+        rs = pool.starmap(update_latest_table,[(code, True) for code in stock_codes])
 
     # 拼接最新日线数据
     latest_df = pd.concat(rs, axis=0)
 
     # 将所有股票最新日线数据写入数据库表latest
     if latest_df.shape[0]:
-        latest_df.to_sql(name='latest', con=create_db_engine(), if_exists='replace', index=False)
+        latest_df.to_sql(name='latest', con=engine, if_exists='replace', index=False)
+
+    if engine_created:
+        engine.dispose()
 
     return latest_df
 
@@ -1184,7 +1231,7 @@ def output_ptrade_file():
 
     # 读取数据库中待交易表数据
     sql_cmd = 'SELECT * FROM {};'.format(table_name)
-    db_data = pd.read_sql(sql=sql_cmd, con=create_db_engine())
+    db_data = pd.read_sql(sql=sql_cmd, con=engine)
 
     # 关闭数据库连接
     engine.dispose()
