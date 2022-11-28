@@ -1,0 +1,44 @@
+# The OpenSIPS configuration file for the control tools.
+#
+# Here you can set variables used in the opensipsctl and opensipsdbctl setup
+# scripts. Per default all variables here are commented out, the control tools
+# will use their internal default values.
+
+## your SIP domain
+SIP_DOMAIN=192.168.0.135
+
+## chrooted directory
+# $CHROOT_DIR="/path/to/chrooted/directory"
+
+## database type: MYSQL, PGSQL, ORACLE, DB_BERKELEY, DBTEXT, or SQLITE
+## by default none is loaded
+# If you want to setup a database with opensipsdbctl, you must at least specify
+# this parameter.
+DBENGINE=MYSQL
+
+## database port (PostgreSQL=5432 default; MYSQL=3306 default)
+DBPORT=3306
+
+## database host
+# DBHOST=192.168.0.135
+DBHOST=127.0.0.1
+
+## database name (for ORACLE this is TNS name)
+DBNAME=opensips
+
+# database path used by dbtext, db_berkeley, or sqlite
+DB_PATH="/usr/local/etc/opensips/dbtext"
+
+## database read/write user
+# DBRWUSER=opensips
+DBRWUSER=root
+
+## password for database read/write user
+# DBRWPW="opensipsrw"
+DBRWPW="123456"
+
+## engine type for the MySQL/MariaDB tabels (default InnoDB)
+MYSQL_ENGINE="MyISAM"
+
+## database super user (for ORACLE this is 'scheme-creator' user)
+DBROOTUSER="root"

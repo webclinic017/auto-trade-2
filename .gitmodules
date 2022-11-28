@@ -85,3 +85,6 @@
 [submodule "modules/btgym"]
 	path = modules/btgym
 	url = https://github.com/Kismuz/btgym.git
+[submodule "devops/k8s/sip/docker-opensips"]
+	path = devops/k8s/sip/docker-opensips
+	url = https://github.com/OpenSIPS/docker-opensips.git

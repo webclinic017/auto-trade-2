@@ -1,0 +1,26 @@
+# 创建.opensips-cli.cfg文件，注意文件位置
+# vim ~/.opensips-cli.cfg
+ 
+# 配置文件中配置如下信息
+[default]
+log_level: INFO
+prompt_name: opensips3.0.2-cli
+prompt_intro: Welcome to OpenSIPS 3.0.2!
+prompt_emptyline_repeat_cmd: False
+history_file: ~/.opensips-cli.history
+history_file_size: 1000
+output_type: pretty-print
+communication_type: fifo
+fifo_file: /tmp/opensips_fifo
+ 
+database_schema_path: /usr/local/opensips3.0.2/share/opensips
+database_admin_url: postgres://postgres:postgres@172.172.0.12
+database_modules: ALL
+database_url: postgres://postgres:postgres@172.172.0.12
+database_name: pbxs
+ 
+# database_schema_path 表示数据库schema目录，此处postgres的sql文件都在/usr/local/opensips3.0.2/share/opensips/opensips目录下，若没有该目录，则需要编译安装db_postgres模块。
+# database_admin_url配置超级管理员信息
+# database_modules配置数据库支持的模块，此处将所有模块都包含进去，如果只包含部分，则将模块名配置在此，以空格分隔，eg：dialog usrloc
+# database_url表示数据库连接字符串，建议配置非管理员用户
+# database_name表示数据库名，若不配置，默认为opensips
