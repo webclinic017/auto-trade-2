@@ -94,10 +94,20 @@ docker logs -f opensips
 ## 进入docker 容器添加 opensips-mysql-module 模块
 
 ```bash
+apt-get -y update -qq && apt-get -y install gnupg2 ca-certificates
+apt-key adv --fetch-keys https://apt.opensips.org/pubkey.gpg
+echo "deb https://apt.opensips.org buster 3.1-releases" >/etc/apt/sources.list.d/opensips.list
+# apt-get -y update -qq && apt-get -y install opensips
 apt-get update
 apt-get -y install opensips-mysql-module
 # apt-get -y install opensips-http-module
 
+# curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg
+# echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org bullseye cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list
+# apt-get update
+# apt-get install opensips-cli
+
+# opensips 2.x
 # vim /usr/local/etc/opensips/opensipsctlrc
 # 解除DBENGIN=MySQL这句话的注释。
 
@@ -107,6 +117,9 @@ apt-get install mysql-server mysql-client libmysqlclient-dev
 ## 添加 opensips user
 
 ```bash
+echo "deb https://apt.opensips.org buster cli-nightly" >/etc/apt/sources.list.d/opensips-cli.list \
+    && apt-get -y update -qq && apt-get -y install opensips-cli
+
 docker cp .opensips-cli.cfg opensips:/root/.opensips-cli.cfg
 
 # 容器
@@ -127,12 +140,25 @@ docker cp opensips:/etc/opensips/opensips.cfg .
 
 socket=udp:eth0:5060   # CUSTOMIZE ME
 # socket=udp:192.168.0.135:5060   # CUSTOMIZE ME
-advertised_address="192.168.0.135:5060"
+# advertised_address="192.168.0.135:5060"
 
-docker cp opensips.cfg opensips:/etc/opensips/opensips.cfg 
+docker cp opensips.cfg opensips2:/etc/opensips/opensips.cfg 
+
+#
+vim /etc/opensips/opensips.cfg
+sed -i "s/^\(socket\|listen\)=udp.*5060/\1=udp:192.168.0.135:5060/g" /etc/opensips/opensips.cfg
+
+```
+
+## 检测脸接 
+
+```bash
+nc -uvz 192.168.65.3 5060 
 ```
 
 ## Linphone 
 
+## 问题
 
+1. docker --net=host 网络模式只支持 Linux，在 Mac 和 Windows 上用不了 
 
