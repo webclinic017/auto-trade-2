@@ -5,8 +5,8 @@
 ```bash
 # Anaconda installed
 pip install pandas
-pip install numpy
-pip install matplotlib
+pip install numpy==1.22.1
+pip install matplotlib==3.2.2 # 3.6.2
 pip install mplfinance
 
 pip install pandas_readdata

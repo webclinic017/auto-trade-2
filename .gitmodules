@@ -88,3 +88,9 @@
 [submodule "devops/k8s/sip/docker-opensips"]
 	path = devops/k8s/sip/docker-opensips
 	url = https://github.com/OpenSIPS/docker-opensips.git
+[submodule "modules/Backtrader-RL"]
+	path = modules/Backtrader-RL
+	url = git@github.com:afirez/Backtrader-RL.git
+[submodule "modules/reinforcement-learning"]
+	path = modules/reinforcement-learning
+	url = git@github.com:afirez/reinforcement-learning.git
