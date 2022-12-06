@@ -26,6 +26,8 @@ def sample_batch_indexes(low, high, size):
         # the memory grows. See https://github.com/numpy/numpy/issues/2764 for a discussion.
         # `random.sample` does the same thing (drawing without replacement) and is way faster.
         try:
+            xrange = range
+            # xrange = np.xrange
             r = xrange(low, high)
         except NameError:
             r = range(low, high)
