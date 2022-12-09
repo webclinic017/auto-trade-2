@@ -10,3 +10,4 @@ ROBUST FINANCIAL TRADING SYSTEM WITH DEEP Q NETWORK
 - https://github.com/wau/keras-rl2
 - https://github.com/ypeleg/keras_rl_tutorial
 - https://github.com/georgezouq/awesome-ai-in-finance
+- https://github.com/DonaldRR/paper_reading/blob/a8de4f637912b80c914791a5311ef98415260d2e/DeepReinforcementLearninginQuantitativeAlgorithmicTrading:AReview.md
