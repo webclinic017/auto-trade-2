@@ -19,8 +19,10 @@ pip install joblib==1.2.0
 
 pip install pandas_readdata
 pip install tushare
-pip install beautifulsoup4==4.11.1
+# pip install beautifulsoup4==4.11.1
 
+pip install backtrader==1.9.76.123
+pip install gym==0.26.2
 
 ```
 
@@ -29,6 +31,35 @@ pip install beautifulsoup4==4.11.1
 ```bash
 source /usr/local/anaconda3/bin/activate
 conda activate py38
+
+# 添加 conda 国内镜像源 TUNA 清华源
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+# 设置搜索时显示通道地址
+conda config --set show_channel_urls yes
+# 恢复默认镜像
+conda config --remove-key channels
+
+conda create -n py38 python=3.8
+# 激活环境
+# Linux:  
+source activate py38
+# or Windows: 
+# activate py38
+
+# 关闭激活环境
+# Linux:  
+source deactivate py38
+# or Windows: 
+# deactivate py38
+
+# 删除虚拟环境
+conda remove -n py38 --all
+
+# 删除环境钟的某个包
+# conda remove --name $your_env_name  $package_name
+
+# 安装 package
+# conda install -n py38 [package]
 ```
 ### install PostgresSQL
 - Mac postgresapp
