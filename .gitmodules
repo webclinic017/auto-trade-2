@@ -94,3 +94,6 @@
 [submodule "modules/reinforcement-learning"]
 	path = modules/reinforcement-learning
 	url = git@github.com:afirez/reinforcement-learning.git
+[submodule "modules/tensortrade"]
+	path = modules/tensortrade
+	url = git@github.com:afirez/tensortrade.git
