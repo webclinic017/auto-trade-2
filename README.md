@@ -4,23 +4,23 @@
 
 ```bash
 # Anaconda installed
-pip install pandas
 pip install numpy==1.22.1
+pip install pandas==1.5.2
 pip install matplotlib==3.2.2 # 3.6.2
-pip install mplfinance
+pip install mplfinance==0.12.9b7
+
+pip install scipy==1.9.3
+pip install scikit-learn==1.2.0
+pip install tensorflow==2.11.0 
+# pip install tensorflow-gpu
+
+pip install jupyter==1.0.0
+pip install joblib==1.2.0
 
 pip install pandas_readdata
 pip install tushare
-pip install beautifulsoup4
+pip install beautifulsoup4==4.11.1
 
-pip install sklearn
-pip install tensorflow # 2.2.0
-# pip install tensorflow-gpu
-pip install keras  # 2.3.1
-
-pip install jupytor
-pip install scipy
-pip install scikit-learn
 
 ```
 
