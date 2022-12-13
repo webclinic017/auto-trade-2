@@ -10,4 +10,5 @@ jupyter==1.0.0
 beautifulsoup4==4.11.1
 backtrader>=1.9.76.123
 gym>=0.26.2
+pandas_ta>=0.3.14b0
 
