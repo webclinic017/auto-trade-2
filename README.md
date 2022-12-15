@@ -31,11 +31,14 @@ pip install yfinance==0.1.64
 pip install ta==0.10.2  
 pip install TA-Lib 
 pip install pandas_ta
+
 pip install ray[default,rllib,tune]==1.8.0
 # ray 需要 3.7 版本的 aiohttp
 pip install aiohttp==3.7.4 
 # ray optuna
 pip install optuna==3.0.4
+
+
 
 ```
 
