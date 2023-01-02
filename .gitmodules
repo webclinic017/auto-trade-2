@@ -97,3 +97,6 @@
 [submodule "modules/tensortrade"]
 	path = modules/tensortrade
 	url = git@github.com:afirez/tensortrade.git
+[submodule "modules/Mastering-Reinforcement-Learning-with-Python"]
+	path = modules/Mastering-Reinforcement-Learning-with-Python
+	url = git@github.com:afirez/Mastering-Reinforcement-Learning-with-Python.git

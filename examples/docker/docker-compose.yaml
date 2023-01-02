@@ -1,0 +1,85 @@
+version: "2.0"
+services:
+  postgres-ts:
+    container_name: ubuntu20-py
+    image: afirezd/ubuntu:20.04_py
+    # command: postgres -c 'max_connections=100'
+    # environment:
+      # TZ: "Asia/Shanghai"
+    # volumes:
+      # - ~/postgres/data/:/var/lib/postgresql/data
+      # - postgres:/var/lib/postgresql/data
+    # ports:
+    #   - 5432:5432
+    # networks:
+    #   - postgres
+    restart: unless-stopped
+
+  # mkdir -p ~/apps/postgres/data/
+  # postgres-ts:
+  #   container_name: postgres-ts
+  #   # image: postgres:14.4-alpine
+  #   # image: timescale/timescaledb-postgis:2.6.1-pg14
+  #   image: timescale/timescaledb:2.6.1-pg14
+  #   # command: postgres -c 'max_connections=100'
+  #   environment:
+  #     # TZ: "Asia/Shanghai"
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: k_house
+  #     # PGDATA: /data/postgres
+  #   volumes:
+  #     # - ~/postgres/data/:/var/lib/postgresql/data
+  #     - postgres:/var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     # TZ: "Asia/Shanghai"
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: postgres
+  #   depends_on:
+  #     - postgres-ts 
+  #   links:
+  #     - postgres-ts
+  #   volumes:
+  #     - pgadmin:/root/.pgadmin
+  #   ports:
+  #     - 8081:80
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  
+   # docker exec -it grafana bash
+  #   grafana-cli plugins install redis-datasource 
+  # grafana:
+  #   container_name: grafana
+  #   image: grafana/grafana
+  #   ports:
+  #     - 3000:3000
+  #   restart: unless-stopped
+  
+  # # prometheus.yml
+  # # global:
+  # #   scrape_interval: 5s 
+  # prometheus:
+  #   container_name: prometheus
+  #   image: prom/prometheus
+  #   volumes:
+  #     - ~/apps/prometheus/conf/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - 3001:3001
+  #   restart: unless-stopped
+
+# networks:
+#   postgres:
+#     driver: bridge
+
+# volumes:
+#   postgres:
+#   pgadmin:

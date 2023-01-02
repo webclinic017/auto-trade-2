@@ -4,7 +4,7 @@
 
 ```bash
 # Anaconda installed
-pip install numpy==1.22.1
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numpy==1.22.1
 pip install pandas==1.5.2
 pip install matplotlib==3.2.2 # 3.6.2
 pip install mplfinance==0.12.9b7
@@ -22,7 +22,23 @@ pip install tushare
 # pip install beautifulsoup4==4.11.1
 
 pip install backtrader==1.9.76.123
-pip install gym==0.26.2
+pip install gym==0.22.0 #0.26.2
+pip install pandas_ta==0.3.14b0
+pip install tensortrade==1.0.3
+# pip install git+https://github.com/tensortrade-org/tensortrade.git
+# pip install plotly==5.11.0
+pip install yfinance==0.1.64
+pip install ta==0.10.2  
+pip install TA-Lib 
+pip install pandas_ta
+
+pip install ray[default,rllib,tune]==1.8.0
+# ray 需要 3.7 版本的 aiohttp
+pip install aiohttp==3.7.4 
+# ray optuna
+pip install optuna==3.0.4
+
+
 
 ```
 
@@ -44,13 +60,14 @@ conda create -n py38 python=3.8
 # Linux:  
 source activate py38
 # or Windows: 
-# activate py38
+# conda init
+# conda activate py38
 
 # 关闭激活环境
 # Linux:  
 source deactivate py38
 # or Windows: 
-# deactivate py38
+# conda deactivate py38
 
 # 删除虚拟环境
 conda remove -n py38 --all
