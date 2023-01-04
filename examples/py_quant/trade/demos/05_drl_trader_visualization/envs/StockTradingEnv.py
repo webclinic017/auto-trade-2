@@ -171,6 +171,7 @@ class StockTradingEnv(gym.Env):
 
         file.close()
 
+
     def render(self, mode='live', **kwargs):
         # Render the environment to the screen
         if mode == 'file':

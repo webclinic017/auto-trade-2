@@ -31,4 +31,9 @@ obs = env.reset()
 for i in range(len(df['Date'])):
     action, _states = model.predict(obs)
     obs, rewards, done, info = env.step(action)
-    env.render(title="MSFT")
+
+    # stable_baselines
+    # env.render(title="MSFT")
+
+    # stable_baselines3
+    env.render(mode='live')
