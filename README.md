@@ -38,7 +38,9 @@ pip install aiohttp==3.7.4
 # ray optuna
 pip install optuna==3.0.4
 
-
+pip install torch==1.8.1+cpu 
+pip install torchvision==0.9.1+cpu 
+pip install torchaudio==0.8.1
 
 ```
 
