@@ -42,6 +42,9 @@ pip install torch==1.8.1+cpu
 pip install torchvision==0.9.1+cpu 
 pip install torchaudio==0.8.1
 
+# https://github.com/notadamking/RLTrader.git
+pip install stable-baselines3[extra]
+
 ```
 
 ### anaconda
