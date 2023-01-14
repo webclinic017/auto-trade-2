@@ -14,7 +14,7 @@ import numpy as np
 from pandas import DataFrame
 from deap import creator, base, tools, algorithms
 
-import autotrader.common.sqglobal as sqglobal
+import autotrade.common.sqglobal as sqglobal
 
 from ..common.constant import (
     Direction, Offset, Exchange,
