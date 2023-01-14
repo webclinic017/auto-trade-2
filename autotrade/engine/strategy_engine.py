@@ -14,16 +14,16 @@ import importlib
 from typing import Any, Callable
 from pathlib import Path
 
-from ..api.ctp_constant import THOST_FTDC_PT_Net
+from ..api3.ctp_constant import THOST_FTDC_PT_Net
 from ..common.constant import (
     EngineType, Exchange, Interval, Product, PRODUCT_CTP2VT, OPTIONTYPE_CTP2VT,
     EventType, MSG_TYPE, SYMBOL_TYPE
 )
-from ..common.datastruct import (
-    Event, SubscribeRequest, OrderData, TradeData, TickData, BarData, PositionData,
-    CtpOrderField, ContractData, AccountData, OrderRequest
+from ..entities import (
+    Event, SubscribeRequest, OrderEntity, TradeEntity, TickEntity, BarEntity, PositionEntity,
+    CtpOrderField, ContractEntity, AccountEntity, OrderRequest
 )
-from ..common.utility import extract_full_symbol, load_json, save_json
+from ..common.utils import extract_full_symbol, load_json, save_json
 from ..strategy.strategy_base import StrategyBase
 from ..data.rqdata import rqdata_client
 from ..data import database_manager
@@ -130,7 +130,7 @@ class StrategyEngine(BaseEngine):
             contracts = yaml.load(fc)
         print('loading contracts, total number:', len(contracts))
         for sym, data in contracts.items():
-            contract = ContractData(
+            contract = ContractEntity(
                 symbol=data["symbol"],
                 exchange=Exchange(data["exchange"]),
                 name=data["name"],
@@ -808,7 +808,7 @@ class StrategyEngine(BaseEngine):
         full_symbol: str,
         days: int,
         interval: Interval,
-        callback: Callable[[BarData], None],
+        callback: Callable[[BarEntity], None],
         datasource: str = 'DataBase'
     ):
         """"""

@@ -7,16 +7,16 @@ import os
 import yaml
 import json
 from pathlib import Path
-from ..api.ctp_constant import THOST_FTDC_PT_Net
+from ..api3.ctp_constant import THOST_FTDC_PT_Net
 from ..common.constant import (
     EngineType, Exchange, Product, OPTIONTYPE_CTP2VT, PRODUCT_CTP2VT,
     EventType, MSG_TYPE, SYMBOL_TYPE
 )
-from ..common.datastruct import (
-    ContractData, Event, TickData, BarData, SubscribeRequest
+from ..entities import (
+    ContractEntity, Event, TickEntity, BarEntity, SubscribeRequest
 )
-from ..common.utility import load_json, save_json
-from source.data.data_board import BarGenerator
+from ..common.utils import load_json, save_json
+from autotrade.data.data_board import BarGenerator
 from ..data import database_manager
 from ..engine.iengine import BaseEngine, EventEngine
 
@@ -78,7 +78,7 @@ class RecorderEngine(BaseEngine):
             contracts = yaml.load(fc)
         print('loading contracts, total number:', len(contracts))
         for sym, data in contracts.items():
-            contract = ContractData(
+            contract = ContractEntity(
                 symbol=data["symbol"],
                 exchange=Exchange(data["exchange"]),
                 name=data["name"],
@@ -300,11 +300,11 @@ class RecorderEngine(BaseEngine):
 
         self.write_log(f"移除Tick记录成功：{full_symbol}")
 
-    def record_tick(self, tick: TickData):
+    def record_tick(self, tick: TickEntity):
         """"""
         database_manager.save_tick_data([tick])
 
-    def record_bar(self, bar: BarData):
+    def record_bar(self, bar: BarEntity):
         """"""
         database_manager.save_bar_data([bar])
 

@@ -14,18 +14,18 @@ import numpy as np
 from pandas import DataFrame
 from deap import creator, base, tools, algorithms
 
-import source.common.sqglobal as sqglobal
+import autotrader.common.sqglobal as sqglobal
 
 from ..common.constant import (
     Direction, Offset, Exchange,
     Interval, Status, EngineType,
     BacktestingMode, STOPORDER_PREFIX, StopOrderStatus
 )
-from ..common.datastruct import (
-    OrderData, TradeData, BacktestTradeData,
-    BarData, TickData, StopOrder, ContractData
+from ..entities import (
+    OrderEntity, TradeEntity, BacktestTradeEntity,
+    BarEntity, TickEntity, StopOrder, ContractEntity
 )
-from ..common.utility import extract_full_symbol
+from ..common.utils import extract_full_symbol
 from ..strategy.strategy_base import StrategyBase
 from ..data import database_manager
 from ..trade.portfolio_manager import PositionHolding
@@ -124,8 +124,8 @@ class BacktestingEngine:
         self.holding = None
         self.strategy_class = None
         self.strategy = None
-        self.tick: TickData
-        self.bar: BarData
+        self.tick: TickEntity
+        self.bar: BarEntity
         self.datetime = None
 
         self.interval = None
@@ -230,7 +230,7 @@ class BacktestingEngine:
         else:
             self.end = datetime.now()
 
-        contract = ContractData(
+        contract = ContractEntity(
             full_symbol=self.full_symbol,
             size=self.size,
             exchange=self.exchange,
@@ -826,7 +826,7 @@ class BacktestingEngine:
             # self.holding.short_price = self.holding.last_price
             self.holding.last_price = price
 
-    def new_bar(self, bar: BarData):
+    def new_bar(self, bar: BarEntity):
         """"""
         self.bar = bar
         self.datetime = bar.datetime
@@ -837,7 +837,7 @@ class BacktestingEngine:
 
         self.update_daily_close(bar.close_price)
 
-    def new_tick(self, tick: TickData):
+    def new_tick(self, tick: TickEntity):
         """"""
         self.tick = tick
         self.datetime = tick.datetime
@@ -917,7 +917,7 @@ class BacktestingEngine:
             commission = turnover * self.rate
             slippage = order.volume * self.size * self.slippage
 
-            trade = BacktestTradeData(
+            trade = BacktestTradeEntity(
                 full_symbol=order.full_symbol,
                 symbol=order.symbol,
                 exchange=order.exchange,
@@ -1019,7 +1019,7 @@ class BacktestingEngine:
             commission = turnover * self.rate
             slippage = stop_order.volume * self.size * self.slippage
 
-            trade = BacktestTradeData(
+            trade = BacktestTradeEntity(
                 full_symbol=stop_order.full_symbol,
                 symbol=stop_order.symbol,
                 exchange=stop_order.exchange,
@@ -1182,7 +1182,7 @@ class BacktestingEngine:
     def send_order(
         self,
         strategy: CtaTemplate,
-        req: OrderData
+        req: OrderEntity
     ):
         """"""
 
@@ -1200,7 +1200,7 @@ class BacktestingEngine:
     def send_stop_order(
         self,
         strategy: CtaTemplate,
-        req: OrderData
+        req: OrderEntity
     ):
         """"""
         req.client_order_id = self.order_count
@@ -1352,7 +1352,7 @@ class DailyResult:
         self.total_pnl = 0
         self.net_pnl = 0
 
-    def add_trade(self, trade: Union[TradeData, BacktestTradeData]):
+    def add_trade(self, trade: Union[TradeEntity, BacktestTradeEntity]):
         """"""
         self.trades.append(trade)
 
