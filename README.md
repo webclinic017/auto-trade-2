@@ -21,8 +21,9 @@ pip install pandas_readdata
 pip install tushare
 # pip install beautifulsoup4==4.11.1
 
+pip install --use-deprecated=legacy-resolver backtesting  
 pip install backtrader==1.9.76.123
-pip install gym==0.22.0 #0.26.2
+pip install gym==0.21.0 #0.22.0 #0.26.2
 pip install pandas_ta==0.3.14b0
 pip install tensortrade==1.0.3
 # pip install git+https://github.com/tensortrade-org/tensortrade.git

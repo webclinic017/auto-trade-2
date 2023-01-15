@@ -1,0 +1,25 @@
+numpy==1.22.1
+pandas==1.5.2
+matplotlib==3.2.2 # 3.6.2
+mplfinance==0.12.9b7
+scipy==1.9.3
+scikit-learn==1.2.0
+tensorflow==2.11.0
+joblib==1.2.0
+jupyter==1.0.0
+beautifulsoup4==4.11.1
+backtrader>=1.9.76.123
+# backtesting # pip install --use-deprecated=legacy-resolver backtesting  
+vectorbt
+yfinance==0.1.64
+efinance
+pandas_ta>=0.3.14b0
+ta==0.10.2
+TA-Lib
+gym>=0.26.2
+stable-baselines3[extra]
+optuna==3.0.4
+torch==1.8.1+cpu
+torchvision==0.9.1+cpu
+torchaudio==0.8.1
+tensortrade==1.0.3
