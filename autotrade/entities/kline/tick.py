@@ -8,6 +8,33 @@ from autotrade.api3.ctp_constant import THOST_FTDC_PT_Net
 from autotrade.common.utils import generate_full_symbol, extract_full_symbol, generate_vt_symbol
 from autotrade.entities.base_entity import BaseEntity
 
+""" 期货
+localtime (本机写入TICK的时间),
+InstrumentID (合约名),
+TradingDay (交易日),
+ActionDay (业务日期),
+UpdateTime （时间）,
+UpdateMillisec（时间毫秒）,
+LastPrice （最新价）,
+Volume（成交量） ,
+HighestPrice （最高价）,
+LowestPrice（最低价） ,
+OpenPrice（开盘价） ,
+ClosePrice（收盘价）,
+AveragePrice（均价）,
+AskPrice1（申卖价一）,
+AskVolume1（申卖量一）,
+BidPrice1（申买价一）,
+BidVolume1（申买量一）,
+UpperLimitPrice（涨停板价）
+LowerLimitPrice（跌停板价）
+OpenInterest（持仓量）,
+Turnover（成交金额）,
+PreClosePrice (昨收盘),
+PreOpenInterest (昨持仓),
+PreSettlementPrice (上次结算价),
+"""
+
 
 @dataclass
 class TickData(BaseEntity):
@@ -58,7 +85,7 @@ class TickData(BaseEntity):
     ask_volume_4: float = 0
     ask_volume_5: float = 0
 
-# StarQuant unique field
+    # StarQuant unique field
     depth: int = 0
     open_interest: float = 0
 

@@ -44,7 +44,7 @@ stats = bt.optimize(
         lower_bound = range(15,45,5),
         rsi_window = range(10,30,2),
         maximize=optim_func,
-         constraint= lambda param:param.upper_bound > param.lower_bound)
+        constraint= lambda param:param.upper_bound > param.lower_bound)
         
 print(stats)
 
