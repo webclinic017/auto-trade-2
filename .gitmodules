@@ -100,3 +100,6 @@
 [submodule "modules/Mastering-Reinforcement-Learning-with-Python"]
 	path = modules/Mastering-Reinforcement-Learning-with-Python
 	url = git@github.com:afirez/Mastering-Reinforcement-Learning-with-Python.git
+[submodule "modules/fin-ml"]
+	path = modules/fin-ml
+	url = git@github.com:afirez/fin-ml.git
