@@ -147,8 +147,6 @@ https://github.com/drlgistics/Wt4ElegantRL
 
 https://github.com/hudson-and-thames/mlfinlab
 
-https://github.com/afirez/stockj
-
 ### tensortrade
 
 https://towardsdatascience.com/creating-bitcoin-trading-bots-that-dont-lose-money-2e7165fb0b29
@@ -204,6 +202,10 @@ https://github.com/orlandpm/Math-for-Programmers
 https://github.com/noootown/Forex-DQN
 
 https://github.com/CodeLogist/RL-Forex-trader-LSTM
+
+https://github.com/miroblog/tf_deep_rl_trader
+
+https://github.com/miroblog/deep_rl_trader
 
 https://github.com/Kismuz/btgym
 
