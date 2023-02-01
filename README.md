@@ -185,6 +185,8 @@ https://github.com/dennybritz/reinforcement-learning
 
 https://github.com/YutaroOgawa/Deep-Reinforcement-Learning-Book
 
+https://github.com/kayuksel/multi-rl-crowd-sim
+
 https://github.com/hudson-and-thames/mlfinlab
 
 https://github.com/tatsath/fin-ml
