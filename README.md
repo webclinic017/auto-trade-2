@@ -163,6 +163,8 @@ https://github.com/data-octo/AITrading
 
 https://github.com/notadamking/RLTrader
 
+https://github.com/tdmdal/rl-hedge-2019
+
 ### data other
 
 https://github.com/akfamily/akshare
