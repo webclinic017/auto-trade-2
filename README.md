@@ -121,6 +121,101 @@ https://www.postgresql.org/ftp/pgadmin/pgadmin4/
 - RL 强化学习
 - CNN, LSTM, NLP, Transformer, Attention 。。。
 
+## 项目
+
+### backtrader
+
+https://github.com/mementum/backtrader
+
+https://gitee.com/redace85/backtrader_bilibili_study
+
+https://github.com/phonegapX/bt-ccxt-store-cn
+
+https://github.com/phonegapX/bt-ctpbee-store
+
+https://github.com/khramkov/Backtrader-MQL5-API
+
+https://github.com/woj-i/btgym
+
+https://github.com/kernc/backtesting.py
+
+https://github.com/vnpy/vnpy
+
+https://github.com/physercoe/starquant
+
+https://github.com/drlgistics/Wt4ElegantRL
+
+https://github.com/hudson-and-thames/mlfinlab
+
+https://github.com/afirez/stockj
+
+### tensortrade
+
+https://towardsdatascience.com/creating-bitcoin-trading-bots-that-dont-lose-money-2e7165fb0b29
+
+https://github.com/tensortrade-org/tensortrade
+
+https://www.tensortrade.org/en/latest/
+
+https://github.com/optuna/optuna-examples
+
+https://stable-baselines3.readthedocs.io/en/master/guide/quickstart.html
+
+https://github.com/data-octo/AITrading
+
+https://github.com/notadamking/RLTrader
+
+### data other
+
+https://github.com/akfamily/akshare
+
+https://github.com/mpquant/Ashare
+
+https://github.com/Micro-sheep/efinance
+
+https://github.com/shidenggui/easyquotation
+
+### ai other
+
+https://github.com/yhilpisch/rlfinance
+
+https://github.com/yhilpisch/aiif
+
+https://github.com/yhilpisch/py4at
+
+https://github.com/dennybritz/reinforcement-learning
+
+https://github.com/YutaroOgawa/Deep-Reinforcement-Learning-Book
+
+https://github.com/hudson-and-thames/mlfinlab
+
+https://github.com/tatsath/fin-ml
+
+https://github.com/tyedem/Machine-Learning-Trader
+
+https://github.com/PacktPublishing/Machine-Learning-for-Algorithmic-Trading-Second-Edition_Original
+
+https://github.com/PacktPublishing/Machine-Learning-for-Finance
+
+https://github.com/CloseToAlgoTrading/CodeFromVideo
+
+https://github.com/orlandpm/Math-for-Programmers
+
+https://github.com/noootown/Forex-DQN
+
+https://github.com/CodeLogist/RL-Forex-trader-LSTM
+
+https://github.com/Kismuz/btgym
+
+https://github.com/microsoft/qlib
+
+https://github.com/AI4Finance-Foundation/FinRL
+
+### other
+
+https://github.com/shidenggui/easytrader
+
+https://github.com/bosspen1/stock
 
 ## 参考资料
 
