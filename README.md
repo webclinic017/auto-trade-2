@@ -143,6 +143,9 @@ https://github.com/vnpy/vnpy
 
 https://github.com/physercoe/starquant
 
+https://github.com/jesse-ai/jesse
+https://github.com/Drakkar-Software/OctoBot
+
 https://github.com/drlgistics/Wt4ElegantRL
 
 https://github.com/hudson-and-thames/mlfinlab
