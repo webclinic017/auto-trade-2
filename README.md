@@ -46,6 +46,7 @@ pip install torchaudio==0.8.1
 # https://github.com/notadamking/RLTrader.git
 pip install stable-baselines3[extra]
 
+pip install pandahouse
 ```
 
 ### anaconda
