@@ -103,3 +103,6 @@
 [submodule "modules/fin-ml"]
 	path = modules/fin-ml
 	url = git@github.com:afirez/fin-ml.git
+[submodule "modules/rl-hedge-2019"]
+	path = modules/rl-hedge-2019
+	url = git@github.com:afirez/rl-hedge-2019.git
