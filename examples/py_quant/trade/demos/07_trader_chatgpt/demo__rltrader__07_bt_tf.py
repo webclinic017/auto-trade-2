@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 import random
-from tensorflow import keras
 import backtrader as bt
-from keras.models import Sequential
-from keras.layers import Dense
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
 
 from collections import deque
 
@@ -38,7 +38,7 @@ class HedgeStrategy(bt.Strategy):
         model.add(Dense(24, input_dim=self.state_size, activation='relu'))
         model.add(Dense(24, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
-        model.compile(loss='mse', optimizer=keras.optimizers.legacy.Adam(lr=0.001))
+        model.compile(loss='mse', optimizer=keras.optimizers.Adam(lr=0.001))
         return model
     
     def choose_action(self, state):
@@ -57,7 +57,7 @@ class HedgeStrategy(bt.Strategy):
 
         target_f = self.dqn.predict(state)
         target_f[0][action] = target
-        self.dqn.fit(state, target_f, epochs=1, verbose=0)
+        self.dqn.fit(state, target_f, epochs=1, verbose=1)
         
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
@@ -73,8 +73,8 @@ class HedgeStrategy(bt.Strategy):
                 #     reward += 1
             target = self.model.predict(state)
             target[0, action] = reward
-            self.model.fit(state, target, epochs=1,
-                           verbose=False)
+            self.model.fit(state, target, epochs=1, verbose=1)
+
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
@@ -184,6 +184,8 @@ print(data)
 data = bt.feeds.PandasData(dataname = GOOG)
 cerebro.adddata(data, name="GOOG")
 
+cerebro.broker.setcash(100000.0)
+cerebro.broker.setcommission(0.0002)
 cerebro.run()
 cerebro.plot()
 

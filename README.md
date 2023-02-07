@@ -153,6 +153,8 @@ https://github.com/hudson-and-thames/mlfinlab
 
 ### tensortrade
 
+[Understanding Deep Learning](https://udlbook.github.io/udlbook/)
+
 https://towardsdatascience.com/creating-bitcoin-trading-bots-that-dont-lose-money-2e7165fb0b29
 
 https://github.com/tensortrade-org/tensortrade
