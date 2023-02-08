@@ -110,6 +110,8 @@ end_dates = {}
 end_date = 0
 for code in codes:
     data = sdb.stock_daily(code, start_query, end_query)
+    data.set_index(['date'], inplace=True)
+    print(data)
     data.index.names = ['datetime']
     data_feed = bt.feeds.PandasData(dataname=data,
                                     fromdate=from_date,
@@ -119,7 +121,7 @@ for code in codes:
     end_date = data.index[-1]  # 股票剔除日
     print('添加股票数据：code: %s' % code)
 
-cerebro.broker.setcash(100000000.0)
+cerebro.broker.setcash(100000.0)
 cerebro.broker.setcommission(commission=0.001)
 cerebro.addstrategy(MultiTestStrategy, maperiod=20)
 cerebro.run()

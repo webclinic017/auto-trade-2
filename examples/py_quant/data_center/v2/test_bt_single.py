@@ -89,11 +89,11 @@ class SingleTestStrategy(bt.Strategy):
 
 # 开始查询时间
 start_query = '2019-01-01'
-end_query = '2022-09-01'
+end_query = '2023-02-08'
 
 # 开始回测时间
 from_date = datetime.datetime(2022, 1, 1)
-to_date = datetime.datetime(2022, 10, 10)
+to_date = datetime.datetime(2023, 2, 8)
 cerebro = bt.Cerebro()
 # 添加几个股票数据
 codes = [
@@ -108,6 +108,8 @@ codes = [
 end_date = 0
 for code in codes:
     data = sdb.stock_daily(code, start_query, end_query)
+    data.set_index(['date'], inplace=True)
+    print(data)
     data.index.names = ['datetime']
     data_feed = bt.feeds.PandasData(dataname=data,
                                     fromdate=from_date,

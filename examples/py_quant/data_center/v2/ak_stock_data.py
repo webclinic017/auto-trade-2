@@ -1,5 +1,7 @@
 import time
 
+import numpy as np
+
 import akshare as ak
 
 import stock_config as scg
@@ -62,16 +64,37 @@ def update_stock_zh_a_daily_eastmoney():
     """
     success_code_list = []
     except_code_list = []
+    empty_data_code_list = []
     # 读取配置信息
     config_df = scg.read_config()
     if config_df.empty:
         print('配置信息错误，请检查...')
         return
+    
+    end_time = time.strftime('%Y%m%d', time.localtime())
+    if type(config_df['daily_update_time'][0]) is np.int64 :
+        end_time = np.int64(end_time)
 
-    for index, row in config_df.iterrows():
+    config_df_ = config_df[config_df['daily_update_time'] < end_time]
+    print(f'需要更新 {len(config_df_)} 个')
+    print(config_df_)
+
+    if config_df_.empty:
+        # 需要更新的数据
+        print('已更新到最新')
+        return
+    
+    # return
+
+    for index, row in config_df_.iterrows():
         code = row['code']
         start_time = row['daily_update_time']
-        end_time = time.strftime('%Y%m%d', time.localtime())
+
+        if start_time == end_time:
+            # 该 code 数据已更新
+            print('成功获取股票: index->{} {}日行情数据'.format(index, code), ' 开始时间: {} 结束时间: {}'.format(start_time, end_time))
+            continue
+
         try:
             except_code = str(code)
             df = ak.stock_zh_a_hist(
@@ -90,6 +113,10 @@ def update_stock_zh_a_daily_eastmoney():
 
         print('成功获取股票: index->{} {}日行情数据'.format(index, code), ' 开始时间: {} 结束时间: {}'.format(start_time, end_time))
         if df.empty:
+            # 更新配置信息config_df
+            # config_df.loc[config_df['code'] == code, 'daily_update_time'] = end_time
+            # config_df.loc[config_df['code'] == code, 'error_daily_update_count'] = 0
+            empty_data_code_list.append(code)
             continue
 
         # 获取对应的子列集
@@ -116,6 +143,7 @@ def update_stock_zh_a_daily_eastmoney():
     print('更新本地配置成功...')
     print("成功请求的code： ", success_code_list)
     print("错误请求code： ", except_code_list)
+    print("空数据请求code： ", empty_data_code_list)
 
 
 if __name__ == '__main__':

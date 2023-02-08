@@ -105,7 +105,7 @@ class TestStrategy(bt.Strategy):
 
 # 股票查询开始和结束时间
 start_query = '2022-01-01'
-end_query = '2022-09-01'
+end_query = '2023-02-08'
 # 回测开始和结束时间
 start_date = datetime.datetime(2022, 7, 11)
 end_date = datetime.datetime(2022, 8, 10)
@@ -121,6 +121,8 @@ codes = [
 # 添加多个股票回测数据
 for code in codes:
     data = sdb.stock_daily(code, start_query, end_query)
+    data.set_index(['date'], inplace=True)
+    print(data)
     data.index.names = ['datetime']
     # 新增指标列
     data['pe'] = 3
@@ -131,7 +133,7 @@ for code in codes:
 
 cerebro.addstrategy(TestStrategy)
 cerebro.run()
-# cerebro.plot()
+cerebro.plot()
 
 if __name__ == '__main__':
     pass

@@ -1,6 +1,7 @@
 
 import os
-     
+
+# currentdir = os.path.split(os.path.realpath(__file__))[0] # "./"
 tmp_path = os.path.join("./", "tmp")
 if not os.path.exists(tmp_path):
      os.makedirs(tmp_path)
@@ -15,6 +16,9 @@ start_date = "20000101"
 # text_font = r"C:\Windows\Fonts\STFANGSO.TTF"
 
 # https://github.com/StellarCN/scp_zh/blob/master/fonts/SimHei.ttf
-text_font = r"D:\下载\SimHei.ttf"
+# windows
+# text_font = r"D:\下载\SimHei.ttf"
+# mac
+text_font = r"/Users/afirez/Downloads/SimHei.ttf" 
 
 
