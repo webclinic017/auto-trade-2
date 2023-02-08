@@ -3,7 +3,10 @@ import time
 
 '''
 数据的存储和获取
-CREATE TABLE stock.stock_daily_price
+
+CREATE DATABASE khouse;
+
+CREATE TABLE khouse.stock_daily_price
 (
     `date`   Date,
     `code`   String,
@@ -20,10 +23,10 @@ CREATE TABLE stock.stock_daily_price
       ORDER BY (javaHash(code), date)
 '''
 
-connection = dict(database="stock",
+connection = dict(database="khouse",
                   host="http://localhost:8123",
                   user='default',
-                  password='sykent')
+                  password='')
 
 
 def to_table(data, table):
@@ -60,7 +63,7 @@ def stock_daily(code, start_time, end_time):
     :param end_time:
     :return:
     """
-    sql = "select * from stock.stock_daily_price where code == '{}' and date between '{}' and '{}'" \
+    sql = "select * from khouse.stock_daily_price where code == '{}' and date between '{}' and '{}'" \
         .format(code, start_time, end_time)
     return from_table(sql)
 
@@ -75,6 +78,6 @@ def all_stock_daily(start_time, end_time):
     :param end_time:
     :return:
     """
-    sql = "select * from stock.stock_daily_price where date between '{}' and '{}'" \
+    sql = "select * from khouse.stock_daily_price where date between '{}' and '{}'" \
         .format(start_time, end_time)
     return from_table(sql)

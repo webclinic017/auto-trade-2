@@ -5,10 +5,18 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 import numpy as np
+import pandas as pd
 import talib as ta
 
 import stock_constant as sc
 import stock_db as sdb
+
+# 用来正常显示中文标签
+plt.rcParams['font.sans-serif'] = ['SimHei']
+# 解决负号显示方块问题
+plt.rcParams['axes.unicode_minus'] = False
+
+print(mpl.matplotlib_fname())
 
 # 下载的字体路径
 zhfont = mpl.font_manager.FontProperties(fname=sc.text_font)
@@ -75,6 +83,10 @@ def kline(code, start_time, end_time):
             'high': 'High', 'low': 'Low',
             'close': 'Close', 'volume': 'Volume'},
         inplace=True)
+    print(f"{df}")
+    # df.index = pd.DatetimeIndex(df['Date'])
+    df["Date"] = pd.to_datetime(df["Date"])
+    df.set_index("Date", inplace=True)
     start_index = 20
     end_index = 147
     df_data = df.iloc[start_index:end_index]
@@ -130,6 +142,7 @@ def kline(code, start_time, end_time):
     fig.text(0.14, 0.89, '%.2f / %.2f' % (np.around(last_data["Open"], 2),
                                           np.round(last_data["Close"], 2)), **large_red_font)
     fig.text(0.12, 0.86, f'{last_data.name.date()}', **normal_label_font)
+    # fig.text(0.12, 0.86, f'{last_data["Date"]}', **normal_label_font)
     change = last_data["Close"] - last_data["Open"]
     fig.text(0.14, 0.86, '%.2f' % change, **small_red_font)
     change_percent = (change / last_data["Open"]) * 100
@@ -180,9 +193,10 @@ def kline(code, start_time, end_time):
              addplot=ap,
              style=m_style,
              type='candle')
-    fig.show()
+    # fig.show()
+    plt.show()
 
 
 if __name__ == '__main__':
-    kline('000001', '2022-01-01', '2022-09-30')
-    pass
+    kline('000001', '2020-01-01', '2023-02-08')
+    # pass

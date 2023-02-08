@@ -17,6 +17,7 @@ pip install tensorflow==2.11.0
 pip install jupyter==1.0.0
 pip install joblib==1.2.0
 
+pip install akshare
 pip install pandas_readdata
 pip install tushare
 # pip install beautifulsoup4==4.11.1
@@ -30,7 +31,7 @@ pip install tensortrade==1.0.3
 # pip install plotly==5.11.0
 pip install yfinance==0.1.64
 pip install ta==0.10.2  
-pip install TA-Lib 
+pip install TA-Lib # or 下载 TA_Lib‑0.4.24‑cp38‑cp38‑win_amd64.whl 文件安装
 pip install pandas_ta
 
 pip install ray[default,rllib,tune]==1.8.0
@@ -47,6 +48,9 @@ pip install torchaudio==0.8.1
 pip install stable-baselines3[extra]
 
 pip install pandahouse
+pip install clickhouse_driver==0.2.3
+pip install clickhouse_sqlalchemy==0.2.0
+pip install aiochclient
 ```
 
 ### anaconda

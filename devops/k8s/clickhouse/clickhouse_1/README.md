@@ -28,10 +28,16 @@ docker-compose ps
 4. 连接到容器并进入 ClickHouse 控制台：
 
 ```bash
+# 进入容器
 docker-compose exec clickhouse clickhouse-client
 
-# 默认账户default 密码为空
-  clickhouse-client -u ck --password=123456 -m
+  # 进入 sql 控制台
+  # 默认账户 default 密码为空
+  clickhouse-client -u default --password -m
+    
+    # 执行 sql 
+    CREATE DATABASE khouse;
+    SHOW DATABASES;
 
 # docker cp clickhouse-server:/etc/clickhouse-server/config.xml /data/clickhouse/conf/config.xml
 # docker cp clickhouse-server:/etc/clickhouse-server/users.xml /data/clickhouse/conf/users.xml
