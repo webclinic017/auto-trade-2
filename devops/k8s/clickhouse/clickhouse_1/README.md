@@ -29,6 +29,13 @@ docker-compose ps
 
 ```bash
 docker-compose exec clickhouse clickhouse-client
+
+# 默认账户default 密码为空
+  clickhouse-client -u ck --password=123456 -m
+
+# docker cp clickhouse-server:/etc/clickhouse-server/config.xml /data/clickhouse/conf/config.xml
+# docker cp clickhouse-server:/etc/clickhouse-server/users.xml /data/clickhouse/conf/users.xml
+docker cp clickhouse_1:/etc/clickhouse-server/users.xml ./users.xml
 ```
 
 在控制台中，您可以使用 SQL 语句进行操作，例如创建数据库、表等。
