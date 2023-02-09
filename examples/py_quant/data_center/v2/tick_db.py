@@ -120,6 +120,30 @@ def from_table(sql):
     print("db-> 耗时: {}  sql: {}".format((time.time() - last_time) * 1000, sql))
     return df
 
+def create_tb_ticks():
+    """
+    ticks 表:
+
+    :param code:
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    sql = \
+    """
+    create table khouse.ticks
+    (
+        date DateTime('Asia/Shanghai'),
+        code String,
+        tick_price_close Float32,
+        tick_volume Int32,
+        close_chg_rate Float32
+    )
+    ENGINE = AggregatingMergeTree()
+    ORDER BY (date, code)
+    """
+    return from_table(sql)
+
 
 def tick_1m_process(code, start_time, end_time):
     """
@@ -145,6 +169,76 @@ def tick_1m_process(code, start_time, end_time):
     #     .format(code, start_time, end_time)
     return from_table(sql)
 
+def create_tb_tick_factor_1m():
+    """
+    tick_factor_1m 表:
+
+    :param code:
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    sql = \
+    """
+create table if not exists khouse.tick_factor_m1
+(
+    date DateTime('Asia/Shanghai'),
+    code String,
+    m1_price_open Float32,
+    m1_price_close Float32,
+    m1_price_high Float32,
+    m1_price_low Float32,
+    m1_price_avg Float32,
+    m1_volume Int32,
+    m1_chg_ptp Float32,
+    m1_chg_avg Float32,
+    m1_price_std Float32,
+    m1_price_skew Float32,
+    m1_price_kurt Float32
+)
+ENGINE = AggregatingMergeTree()
+ORDER BY (date, code)
+    """
+    return from_table(sql)
+
+def create_tick_1m_wv():
+    """
+    tick_1m_wv 窗口视图:
+
+    :param code:
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+#     函数兼容问题，函数名更换试试：
+#     TUMBLE --> tumble
+#     TUMBLE_START --> tumbleStart
+    sql = \
+    """
+set allow_experimental_window_view = 1;
+
+CREATE WINDOW VIEW IF NOT EXISTS tick_m1_wv TO khouse.tick_factor_m1  WATERMARK=INTERVAL '2' SECOND  AS
+SELECT 
+    code, 
+    TUMBLE_START(date_id), 
+    any(tick_price_close) as m1_price_open, 
+    anyLast(tick_price_close) as m1_price_close, 
+    max(tick_price_close) as m1_price_high,
+    min(tick_price_close) as m1_price_low, 
+    0.5 * (m1_price_open + m1_price_close) as m1_price_avg, 
+    sum(tick_volume) as m1_volume,
+    max(close_chg_rate) - min(close_chg_rate) as m1_chg_ptp,
+    avg(close_chg_rate) as m1_chg_avg,
+    stddevPop(tick_price_close) as m1_price_std,
+    skewPop(tick_price_close) as m1_price_skew,
+    kurtPop(tick_price_close) as m1_price_kurt
+FROM khouse.ticks
+GROUP BY TUMBLE(date, INTERVAL '1' MINUTE) as date_id, code
+ORDER BY date_id, code
+    """
+    # sql = "select * from khouse.stock_daily_price where code == '{}' and date between '{}' and '{}'" \
+    #     .format(code, start_time, end_time)
+    return from_table(sql)
 
 def all_ticks(start_time, end_time):
     """
@@ -241,15 +335,28 @@ def mock_ticks_insert():
     #     }
     # )
     df = gen_mock_tick(1)
-    print(df)
-    return
     # net_df 的列名可能和数据库列名不一样，修改列名对应数据库的列名
     df.columns = ['date', 'code', 'tick_price_close', 'tick_volume', 'close_chg_rate']
     # 修改 index 为 date 去掉默认的 index 便于直接插入数据库
     df["date"] = pd.to_datetime(df["date"])
     df.set_index(['date'], inplace=True)
 
+    print(df)
+    return
     return to_table(data=df, table="ticks")
+
+def create_tick_tb_and_wv():
+    # 创建
+    # create_tb_ticks()
+    # create_tb_tick_factor_1m()
+    # create_tick_1m_wv()
+
+    # watch 窗口试图
+    # watch_ticks_1m_wv2()
+
+    # 模拟插入数据
+    # mock_ticks_insert()
+    pass
 
 def watch_ticks_1m_wv2():
     """
@@ -280,4 +387,5 @@ def watch_ticks_1m_wv2():
 
 if __name__ == '__main__':
     mock_ticks_insert()
+    # create_tick_tb_and_wv()
     pass

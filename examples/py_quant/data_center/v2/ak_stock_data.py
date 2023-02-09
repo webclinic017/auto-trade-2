@@ -1,4 +1,5 @@
 import time
+import datetime
 
 import numpy as np
 
@@ -67,6 +68,7 @@ def update_stock_zh_a_daily_eastmoney():
     empty_data_code_list = []
     # 读取配置信息
     config_df = scg.read_config()
+    # config_df["daily_update_time"] = config_df["daily_update_time"].apply(lambda x: x - 1 if x == 20230209 else x)
     if config_df.empty:
         print('配置信息错误，请检查...')
         return
@@ -94,6 +96,10 @@ def update_stock_zh_a_daily_eastmoney():
             # 该 code 数据已更新
             print('成功获取股票: index->{} {}日行情数据'.format(index, code), ' 开始时间: {} 结束时间: {}'.format(start_time, end_time))
             continue
+
+        if str(start_time) != str(sct.start_date):
+            start_time =  datetime.datetime.strptime(f'{start_time}','%Y%m%d') + datetime.timedelta(days=1)
+            start_time = datetime.datetime.strftime(start_time, '%Y%m%d')
 
         try:
             except_code = str(code)
@@ -147,5 +153,15 @@ def update_stock_zh_a_daily_eastmoney():
 
 
 if __name__ == '__main__':
+    # df = sdb.delete_daily_duplicated(date='2023-02-09')
+    # print(df)
+
+    # df = sdb.stock_daily(code='000002', start_time='2023-02-08', end_time='2023-02-09')
+    # print(df)
+
+    # df = sdb.all_stock_daily(start_time='2023-02-09', end_time='2023-02-09')
+    # print(df)
+    
     start()
+
     pass

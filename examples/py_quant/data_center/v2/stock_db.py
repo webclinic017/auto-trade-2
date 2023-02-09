@@ -81,3 +81,15 @@ def all_stock_daily(start_time, end_time):
     sql = "select * from khouse.stock_daily_price where date between '{}' and '{}'" \
         .format(start_time, end_time)
     return from_table(sql)
+
+def delete_daily_duplicated(date = '2023-02-08'):
+    sql = f"""
+    ALTER TABLE khouse.stock_daily_price DELETE 
+    WHERE (date, code) NOT IN (
+        SELECT date, code
+        FROM khouse.stock_daily_price 
+        where date between {date} and {date}
+        GROUP BY date, code HAVING count() = 1
+    )
+    """
+    return from_table(sql)
