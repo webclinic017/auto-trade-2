@@ -25,7 +25,8 @@ def func(token="", uid=0, room=0):
     def disconnect():
         print("I'm disconnected!")
 
-    url = 'ws://192.168.70.220:9009/?EIO=3&transport=websocket&X-AUTH-TOKEN=727362610017734656&type=1'
+    # url = 'ws://192.168.70.220:9009/?EIO=3&transport=websocket&X-AUTH-TOKEN=727362610017734656&type=1'
+    url = 'ws://192.168.0.129:80/yunhe-shop/flz'
     # url = url.format(uid=uid, token=token)
 
     sio.connect(
