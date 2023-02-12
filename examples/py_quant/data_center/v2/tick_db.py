@@ -83,6 +83,8 @@ SELECT
 FROM khouse.ticks
 GROUP BY TUMBLE(date, INTERVAL '1' MINUTE) as date_id, code
 ORDER BY date_id, code
+
+WATCH tick_m1_wv
 '''
 
 connection = dict(database="khouse",

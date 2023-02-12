@@ -172,3 +172,38 @@ for item in tqdm(data):
 虽然仍处于实验阶段，但 Clickhouse 窗口视图显示出强大的流式处理能力，
 我们可以利用其轻松搭建一个tick级的高频交易系统，
 自动提取特征入库，省去手工维护之烦恼。
+
+
+### other
+
+ClickHouse基于全局字典与物化视图的精确去重方案
+
+clickhouse 具有 bitmap, 但只支持 int, 实测表明 groupBitmap() 这个 agg 比直接的 count(distinct x) 计算要快至少一倍以上, 按之前druid中的测试
+经验表明, 全局字典编码后的bitmap的查询性能也远远比普通bitmap好。
+通过物化视图对bitmap构建groupBitmapState的中间存储状态, 通过预计算bitmap的并集能减少查询的开销。 并且物化视图的行数远比原始表行数
+少, 除了bitmap以外的sum/max/min/avg等计算耗时也呈倍数下降
+
+由于bitmap只支持int类型，所以uid，pid这类long类型的指标需要维护一个全局字典将long类型映射为int类型
+
+
+```sql
+
+CREATE MATERIALIZED VIEW atsplch_rpt.
+ads_screen_unique_indicator_view_local on cluster cluster01
+ENGINE = ReplicatedAggregatingMergeTree('/clickhouse/tables/{shard}
+/atsplch_rpt/ads_screen_unique_indicator_view_local', '{replica}')
+partition by dt
+ORDER BY (indicator_id,city_id)
+SETTINGS index_granularity = 10
+POPULATE
+AS SELECT
+dt,
+indicator_id,
+city_id,
+groupBitmapState(globalDict('pid_cn', indicator_value)) as
+indicator_value_count,
+maxState(parseDateTimeBestEffort(create_time)) as create_time
+FROM atsplch_rpt.ads_screen_unique_indicator_local
+GROUP BY dt,indicator_id,city_id;
+
+```

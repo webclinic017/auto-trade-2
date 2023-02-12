@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "port": 8123,
+            "previewLimit": 50,
+            "driver": "ClickHouse",
+            "server": "localhost",
+            "name": "localhost@khouse",
+            "group": "ch",
+            "database": "khouse",
+            "username": "default"
+        }
+    ]
+}
