@@ -155,6 +155,106 @@ GROUP BY code, floor(datetime / interval 1 minute);
 -- 这样，我们就可以在 ClickHouse 中存储实时 tick 数据，并实时合成 1 分钟 k 线数据了。
 
 
+-- 在 ClickHouse 中，全局字典是一种常用的数据压缩方式，可以用来存储变量的值和对应的编号，从而减小存储空间和提高查询性能。
+
+-- 在存储 tick 数据时，可以将交易代码、交易时间等数据压缩为编号，使用全局字典存储。
+
+-- 合成 1 分钟 k 线数据时，可以使用 ClickHouse 的窗口视图进行数据处理，对
+-- 每个 1 分钟的数据窗口计算最高价、最低价、开盘价、收盘价等指标，生成 1 分钟 k 线数据。
+
+-- 以下是一个简单的实现代码：
+CREATE DICTIONARY stock_dict (symbol String, id UInt64)
+PRIMARY KEY symbol
+LAYOUT FLAT();
+
+INSERT INTO stock_dict (symbol) VALUES ('AAPL'), ('GOOG'), ('TSLA'), ('AMZN');
+
+CREATE TABLE tick_data (
+  symbol_id UInt64,
+  time DateTime,
+  price Float32,
+  volume UInt32
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(time)
+ORDER BY (symbol_id, time);
+
+INSERT INTO tick_data
+SELECT
+  id,
+  '2022-01-01 10:00:00' + number * 300 AS time,
+  rand(),
+  rand()
+FROM
+  numbers(100)
+JOIN stock_dict
+ON
+  symbol = 'AAPL';
+
+set allow_experimental_window_view=1；
+CREATE WINDOW VIEW kline_data AS
+SELECT
+  symbol_id,
+  toStartOfMinute(time) AS time,
+  any(price) AS open,
+  max(price) AS high,
+  min(price) AS low,
+  avg(price) AS close,
+  sum(volume) AS volume
+FROM
+  tick_data
+GROUP BY
+  symbol_id,
+  time;
+
+SELECT * FROM kline_data;
+-- 这是一个简单的实现，如需要获取实际的实现代码，请考虑根据具体需求实现
+
+-- 继续说
+-- 在 ClickHouse 中，您可以使用全局字典来优化存储频繁出现的数据项。
+-- 在全局字典中，您可以将数据映射到整数编号，以节省存储空间。
+
+-- 在存储 tick 数据时，您可以使用全局字典将合约代码，交易所编号等信息映射到整数编号。
+-- 在此之后，您可以在窗口视图中对数据进行聚合，并生成一分钟 k 线数据。
+
+-- 以下是一段示例代码：
+CREATE DICTIONARY dict_exchange (
+    id       UInt32,
+    name     String
+) PRIMARY KEY id
+LAYOUT(DENSE)
+TO dict.txt;
+
+CREATE DICTIONARY dict_symbol (
+    id       UInt32,
+    name     String
+) PRIMARY KEY id
+LAYOUT(DENSE)
+TO dict.txt;
+
+CREATE TABLE tick_data (
+    datetime         DateTime,
+    exchange         UInt32,
+    symbol           UInt32,
+    last_price       Float32,
+    volume           UInt32
+) ENGINE=MergeTree(datetime, (exchange, symbol), 8192);
+
+CREATE MATERIALIZED VIEW mv_1min_kline AS
+SELECT 
+    datetime, 
+    exchange, 
+    symbol, 
+    last_price, 
+    volume, 
+    toDateTime(floor((toUInt32(datetime) - toUInt32('1970-01-01 00:00:00')) / 60) * 60) AS kline_time
+FROM tick_data
+GROUP BY 
+    exchange, 
+    symbol, 
+    kline_time
+-- 在上面的代码中，我们首先创建了两个全局字典，分别存储交易所编号和合约代码。
+-- 然后，我们创建了一个 tick_data 表，其中存储了原始的 tick 数据。
+-- 最后，我们创建了一个窗口视图 mv_1min_kline
 
 
 
