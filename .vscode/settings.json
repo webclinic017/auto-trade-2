@@ -9,6 +9,16 @@
             "group": "ch",
             "database": "khouse",
             "username": "default"
+        },
+        {
+            "port": 8123,
+            "previewLimit": 50,
+            "driver": "ClickHouse",
+            "name": "localhost@default",
+            "group": "ch",
+            "username": "default",
+            "database": "default",
+            "server": "localhost"
         }
     ]
 }

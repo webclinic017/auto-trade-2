@@ -347,6 +347,35 @@ def mock_ticks_insert():
     return
     return to_table(data=df, table="ticks")
 
+def mock_test_tick_insert(save = False):
+    """
+    mock insert ticks 行情数据, tick_wv(Window View) 会有变化 
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    # df = pd.DataFrame(
+    #     { 
+    #     "date":["2023-02-08 15:00:00"],
+    #     "code":["688787"],
+    #     "tick_price_close":[189.6],
+    #     "tick_volume":[48665.0],
+    #     "close_chg_rate":[20.0],
+    #     }
+    # )
+    df = gen_mock_tick(1)
+    # net_df 的列名可能和数据库列名不一样，修改列名对应数据库的列名
+    df.columns = ['date', 'code', 'price', 'volume', 'close_chg_rate']
+    df = df[['date', 'code', 'price', 'volume']]
+    # 修改 index 为 date 去掉默认的 index 便于直接插入数据库
+    df["date"] = pd.to_datetime(df["date"])
+    df.set_index(['date'], inplace=True)
+
+    print(df)
+    if save:
+        to_table(data=df, table="test_tick")
+    return
+
 def create_tick_tb_and_wv():
     # 创建
     # create_tb_ticks()
@@ -388,6 +417,7 @@ def watch_ticks_1m_wv2():
 
 
 if __name__ == '__main__':
-    mock_ticks_insert()
+    # mock_ticks_insert()
+    mock_test_tick_insert(save=True)
     # create_tick_tb_and_wv()
     pass
