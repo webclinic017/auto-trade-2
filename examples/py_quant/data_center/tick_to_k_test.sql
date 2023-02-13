@@ -3,12 +3,12 @@
 -- 1.
 -- DROP TABLE khouse.test_tick;
 CREATE TABLE khouse.test_tick (
-  date DateTime,
+  datetime DateTime,
   code String,
   price Float64,
   volume Int32
 ) ENGINE = MergeTree()
-ORDER BY (code, date);
+ORDER BY (code, datetime);
 
 -- DROP DICTIONARY khouse.test_tick_dict;
 CREATE DICTIONARY khouse.test_tick_dict (
@@ -57,16 +57,16 @@ set allow_experimental_window_view=1;
 -- DROP VIEW khouse.test_tick_kline_1m_wv;
 CREATE WINDOW VIEW IF NOT EXISTS khouse.test_tick_kline_1m_wv TO khouse.test_tick_kline_1m  WATERMARK=INTERVAL '2' SECOND  AS
 SELECT 
+    TUMBLE_START(w_id) as date, 
     code, 
-    TUMBLE_START(date_id), 
     any(price) as open, 
     max(price) as high,
     min(price) as low, 
     anyLast(price) as close, 
     sum(volume) as volume
-FROM khouse.test_tick_dict
-GROUP BY TUMBLE(date, INTERVAL '1' MINUTE) as date_id, code
-ORDER BY date_id, code;
+FROM khouse.test_tick
+GROUP BY TUMBLE(datetime, INTERVAL '1' MINUTE) as w_id, code
+ORDER BY w_id, code;
 
 WATCH khouse.test_tick_kline_1m_wv;
 

@@ -365,11 +365,11 @@ def mock_test_tick_insert(save = False):
     # )
     df = gen_mock_tick(1)
     # net_df 的列名可能和数据库列名不一样，修改列名对应数据库的列名
-    df.columns = ['date', 'code', 'price', 'volume', 'close_chg_rate']
-    df = df[['date', 'code', 'price', 'volume']]
+    df.columns = ['datetime', 'code', 'price', 'volume', 'close_chg_rate']
+    df = df[['datetime', 'code', 'price', 'volume']]
     # 修改 index 为 date 去掉默认的 index 便于直接插入数据库
-    df["date"] = pd.to_datetime(df["date"])
-    df.set_index(['date'], inplace=True)
+    df["datetime"] = pd.to_datetime(df["datetime"])
+    df.set_index(['datetime'], inplace=True)
 
     print(df)
     if save:
