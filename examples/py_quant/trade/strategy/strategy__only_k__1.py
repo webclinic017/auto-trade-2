@@ -44,6 +44,7 @@ df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
 # 对K线数据进行技术分析，判断市场趋势和交易信号
 df['ma5'] = df['close'].rolling(window=5).mean()
 df['ma10'] = df['close'].rolling(window=10).mean()
+df['ma20'] = df['close'].rolling(window=20).mean()
 df['signal'] = 0
 df.loc[(df['ma5'] > df['ma10']), 'signal'] = 1
 
