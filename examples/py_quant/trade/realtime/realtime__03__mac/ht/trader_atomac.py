@@ -77,9 +77,9 @@ def atomac_button(automator, window):
 
 def atomac_text_field(automator, window):
     # part 6, 输入内容（输入键盘字符，US_keyboard）
-    # 666632307673
+    # 
     # s1 = window.findFirstR(AXRole='AXTextField', AXRoleDescription='请输入客户号')
-    # s1 = window.findFirstR(AXRole='AXTextField', AXTitle='666632307673')
+    # s1 = window.findFirstR(AXRole='AXTextField', AXTitle='')
     # s1 = window.findFirstR(AXRole='AXTextField')
     l_AXTextField = window.findAll(AXRole='AXTextField')[0]
     s1 = l_AXTextField[0]
@@ -93,7 +93,7 @@ def atomac_text_field(automator, window):
     s1_p = s1.AXPosition
     s1_s = s1.AXSize
     s1.tripleClickMouse((s1_p[0] + s1_s[0] / 2, s1_p[1] + s1_s[1] / 2))
-    s1.sendKeys('66663230767')
+    s1.sendKeys('')
 
     #  输入键盘上的修饰符
     atomac_send_keys(automator, window, s1)
