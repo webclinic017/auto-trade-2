@@ -1,5 +1,7 @@
 import ccxt
 import time
+import json
+
 
 """
 实现一个数字货币马丁格尔实盘策略
@@ -8,12 +10,17 @@ import time
 下面是一个简单的实现数字货币马丁格尔实盘策略的 Python 示例代码：
 """
 
+params = {}
+
+with open('params.json', 'r') as params_file:
+    params = json.loads(params_file)
+
 # 定义交易对和交易所
 symbol = 'ETH/USDT'
 exchange = ccxt.okex({
-    'apiKey': '7ae95e84-753d-432d-87e2-5d627b9b81a2',
-    'secret': 'FCB5572D427DECDE2A0855ED509FF823',
-    'password': 'Dbok5&18',
+    'apiKey': params['okex']['apikey'],
+    'secret': params['okex']['secret'],
+    'password':  params['okex']['password'],
     'enableRateLimit': True
 })
 

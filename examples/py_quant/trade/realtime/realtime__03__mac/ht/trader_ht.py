@@ -676,15 +676,15 @@ if __name__ == '__main__':
     # df = pd.DataFrame(data, columns=columns)
     # print(df)
 
-    columns, data = get_orders()
-    df = pd.DataFrame(data, columns=columns)
-    print(df)
+    # columns, data = get_orders()
+    # df = pd.DataFrame(data, columns=columns)
+    # print(df)
 
     # columns, data = get_trades()
     # df = pd.DataFrame(data, columns=columns)
     # print(df)
 
-    # buy("000001", 11.0, 100)
+    buy("000001", 11.0, 100)
     # sell("000001", 20.0, 100)
 
  
